@@ -1,0 +1,49 @@
+@import 'swiper/css';
+@import 'swiper/css/grid';
+@import 'swiper/css/pagination';
+@import 'swiper/css/effect-fade';
+
+@import 'react-toastify/dist/ReactToastify.css';
+
+/* swiper */
+.swiper-pagination.swiper-pagination-bullets {
+  bottom: 20px
+}
+
+.swiper-pagination-bullet {
+  background-color: var(--_fff);
+  border: 2px solid var(--_ccc);
+  width: 10px;
+  height: 10px;
+  margin: 0 4px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: var(--_007);
+}
+
+/* scrollbar */
+::-webkit-scrollbar {
+  width: 16px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 6px;
+  background-color: var(--_b7d);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--_264);
+  border-radius: 6px;
+  border: 4px solid transparent;
+  background-clip: content-box;
+}
+
+/* top-product */
+.top-product-title {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

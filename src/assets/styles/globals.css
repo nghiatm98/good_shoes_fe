@@ -1,0 +1,17 @@
+body {
+  font-family: Roboto, 'sans-serif';
+  position: relative;
+  font-size: 16px;
+  overflow-x: hidden;
+  color: #000;
+}
+
+:root {
+  --_007: #007bff;
+  --_fff: #fff;
+  --_ccc: #ccc;
+  --_264: #264659;
+  --_b7d: #B7D9F8;
+  --_000_15: #00000026;
+  --_fff_4: #ffffff66
+}
