@@ -17,7 +17,6 @@ interface IPriceFilterProps {
 }
 
 export function PriceFilter({ title, minValue, maxValue, min, max, step, onChange, type, onSearch }: Readonly<IPriceFilterProps>) {
-  console.log(minValue, maxValue)
   return (
     <div className="group relative">
       <div className="flex flex-row items-center gap-x-3 cursor-pointer relative nav h-10">

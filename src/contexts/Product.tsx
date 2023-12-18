@@ -1,5 +1,5 @@
-import { filterUniqueElements, isEmptyObject } from 'common'
-import type { ProductModel, ProductParamsModel, RouterModel } from 'models'
+import { filterUniqueElements } from 'common'
+import type { OrderModel, ProductModel, ProductParamsModel, RouterModel } from 'models'
 import qs from 'query-string'
 import { ReactNode, createContext, useEffect, useMemo, useState } from 'react'
 import { OrderService, ProductService } from 'services'
@@ -9,13 +9,15 @@ interface ProductState {
   productsFilter: ProductModel[]
   categoriesRouter: RouterModel[]
   brandsRouter: RouterModel[]
+  orders: OrderModel[]
 }
 
 export const ProductContext = createContext<ProductState>({
   products: [],
   productsFilter: [],
   categoriesRouter: [],
-  brandsRouter: []
+  brandsRouter: [],
+  orders: []
 })
 
 interface IProductProviderProps {
@@ -25,6 +27,7 @@ interface IProductProviderProps {
 export function ProductProvider({ children }: IProductProviderProps) {
   const queryParam: ProductParamsModel = qs.parse(location.search)
   const [products, setProducts] = useState<ProductModel[]>([])
+  const [orders, setOrders] = useState<OrderModel[]>([])
   const [productsFilter, setProductsFilter] = useState<ProductModel[]>([])
   const [categories, setCategories] = useState<string[]>([])
   const [brands, setBrands] = useState<string[]>([])
@@ -33,20 +36,14 @@ export function ProductProvider({ children }: IProductProviderProps) {
     try {
       const { items = [] } = await ProductService.getProducts({ params })
       setProductsFilter(items)
-    } catch (error) {
-      console.log(error)
-    }
+    } catch (error) {}
   }
 
-  const onGetAllProducts = async() => {
+  const onGetAllProducts = async () => {
     try {
-        const res = await OrderService.getOrders()
-        console.log(res)
-        const { items = [] } = await ProductService.getProducts({})
-        setProducts(items)
-      } catch (error) {
-        console.log(error)
-      }
+      const { items = [] } = await ProductService.getProducts({})
+      setProducts(items)
+    } catch (error) {}
   }
 
   const onGetFilterList = () => {
@@ -84,8 +81,16 @@ export function ProductProvider({ children }: IProductProviderProps) {
     })
   }, [categories])
 
+  const onGetOrders = async () => {
+    try {
+      const { items } = await OrderService.getOrders()
+      setOrders(items)
+    } catch (error) {}
+  }
+
   useEffect(() => {
     onGetAllProducts()
+    onGetOrders()
   }, [])
 
   useEffect(() => {
@@ -98,7 +103,8 @@ export function ProductProvider({ children }: IProductProviderProps) {
         products,
         productsFilter,
         categoriesRouter,
-        brandsRouter
+        brandsRouter,
+        orders
       }}
     >
       {children}

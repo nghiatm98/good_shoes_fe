@@ -47,3 +47,8 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+/* text-editor */
+.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline {
+  min-height: 200px;
+}

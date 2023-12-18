@@ -1,13 +1,20 @@
 import { lazy } from 'react'
+import { ICNavbarOrder, ICNavbarProduct } from 'assets'
 
+//public
 const HomePage = lazy(() => import('features/public/home'))
-const LoginPage = lazy(() => import('features/common/Login'))
 const ProductPage = lazy(() => import('features/public/product'))
 const ProductDetailPage = lazy(() => import('features/public/product/productDetail'))
 const NewPage = lazy(() => import('features/public/new'))
 const NewDetailPage = lazy(() => import('features/public/new/newDetail'))
 const AboutUsPage = lazy(() => import('features/public/aboutUs'))
 const PaymentPage = lazy(() => import('features/public/payment'))
+const PaymentResultPage = lazy(() => import('features/public/payment/PaymentResult'))
+
+//manager
+const ProductManagementPage = lazy(() => import('features/private/product'))
+const OrderManagementPage = lazy(() => import('features/private/order'))
+const ProductDetailManagementPage = lazy(() => import('features/private/product/productDetail'))
 
 const NotFoundPage = lazy(() => import('features/common/NotFound'))
 export interface IRouter {
@@ -15,9 +22,11 @@ export interface IRouter {
   name: string
   nameKo?: string
   element: any
-  isHiden?: boolean
-  isHidenRouter?: boolean
+  isHidden?: boolean
+  isHiddenRouter?: boolean
   isDetail?: boolean
+  icon?: any
+  disabled?: boolean
   subNavs?: {
     path: string
     name: string
@@ -43,45 +52,93 @@ export const paths = {
     prefix: '/about-us'
   },
   payment: {
-    prefix: '/payment'
+    prefix: '/payment',
+    result: '/payment-result'
   }
 }
 
 export const rootRouter: IRouter[] = [
   {
     path: paths.home.prefix,
-    name: 'home.header.navigation.home',
+    name: '',
     element: HomePage
   },
   {
     path: paths.product.prefix,
-    name: 'home.header.navigation.home',
+    name: '',
     element: ProductPage
   },
   {
     path: paths.product.detail(),
-    name: 'home.header.navigation.home',
+    name: '',
     element: ProductDetailPage
   },
   {
     path: paths.new.prefix,
-    name: 'home.header.navigation.home',
+    name: '',
     element: NewPage
   },
   {
     path: paths.new.detail(),
-    name: 'home.header.navigation.home',
+    name: '',
     element: NewDetailPage
   },
   {
     path: paths.aboutUs.prefix,
-    name: 'home.header.navigation.home',
+    name: '',
     element: AboutUsPage
   },
   {
     path: paths.payment.prefix,
-    name: 'home.header.navigation.home',
+    name: '',
     element: PaymentPage
+  },
+  {
+    path: paths.payment.result,
+    name: '',
+    element: PaymentResultPage
+  }
+]
+
+export const pathsManager = {
+  products: {
+    prefix: 'products',
+    new: '/manager/products/new',
+    detail: (id: string = ':id') => `/manager/products/${id}`
+  },
+  orders: {
+    prefix: 'orders',
+    detail: (id: string = ':id') => `/manager/orders/${id}`
+  }
+}
+
+export const privateRouter: IRouter[] = [
+  {
+    path: pathsManager.orders.prefix,
+    element: OrderManagementPage,
+    name: 'Quản lý đơn hàng',
+    icon: ICNavbarOrder
+  },
+  //product
+  {
+    path: pathsManager.products.prefix,
+    element: ProductManagementPage,
+    name: 'Quản lý sản phầm',
+    icon: ICNavbarProduct
+  },
+  {
+    path: pathsManager.products.new,
+    element: ProductDetailManagementPage,
+    name: 'Quản lý sản phầm',
+    icon: ICNavbarProduct,
+    isHidden: true
+  },
+  {
+    path: pathsManager.products.detail(),
+    element: ProductDetailManagementPage,
+    name: 'Chi tiết sản phẩm',
+    icon: ICNavbarProduct,
+    isHidden: true
   }
 ]
 

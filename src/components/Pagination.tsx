@@ -6,14 +6,15 @@ import React from 'react'
 
 interface IPaginationProps {
   totalItems: number
+  pageSize?: number
 }
 
-export const Pagination = ({ totalItems }: IPaginationProps) => {
-  const { currentPage, handleNextPage, handlePrevPage, disabledNextPage, disabledPrevPage, totalPage } = usePagination({ totalItems })
+export const Pagination = ({ totalItems, pageSize = NUMBER_OF_PAGE }: IPaginationProps) => {
+  const { currentPage, handleNextPage, handlePrevPage, disabledNextPage, disabledPrevPage, totalPage } = usePagination({ totalItems, pageSize })
 
-  if (totalItems <= NUMBER_OF_PAGE) return <></>
+  if (totalItems <= pageSize) return <></>
   return (
-    <div className="min-w-[151px] h-12 rounded-full border border-_d9d w-fit px-6 flex flex-row items-center justify-between mx-auto">
+    <div className="min-w-[151px] h-12 mt-5 rounded-full border border-_d9d w-fit px-6 flex flex-row items-center justify-between mx-auto">
       <ICArrowRight
         className={clsx('rotate-180 cursor-pointer', {
           '!cursor-not-allowed': disabledPrevPage

@@ -5,9 +5,11 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
   server: {
+    open: true,
+    host: true,
     port: 5173,
     proxy: {
-      "/api/v1": {
+      "api/v1": {
         target: "http://good-shoe.tr29.store",
         changeOrigin: true,
         secure: false,

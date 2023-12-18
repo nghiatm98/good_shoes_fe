@@ -1,15 +1,16 @@
 import { useRefreshWeb } from 'hooks'
 import { Suspense } from 'react'
 import { RouterRoot } from 'routers'
-import { LoadingData } from 'components'
-import { ModalProvider, ProductProvider } from 'contexts'
+import { LoadingComponent } from 'components'
+import { CartProvider, ModalProvider, ProductProvider } from 'contexts'
 import { ToastContainer } from 'react-toastify'
+import { ErrorBoundary } from 'layouts'
 
 function App() {
   useRefreshWeb()
 
   return (
-    <Suspense fallback={<LoadingData />}>
+    <Suspense fallback={<LoadingComponent />}>
       <ToastContainer
         position="top-right"
         autoClose={4000}
@@ -22,11 +23,15 @@ function App() {
         pauseOnHover
         theme="dark"
       />
-      <ModalProvider>
-        <ProductProvider>
-          <RouterRoot />
-        </ProductProvider>
-      </ModalProvider>
+      <ErrorBoundary>
+        <ModalProvider>
+          <ProductProvider>
+            <CartProvider>
+              <RouterRoot />
+            </CartProvider>
+          </ProductProvider>
+        </ModalProvider>
+      </ErrorBoundary>
     </Suspense>
   )
 }

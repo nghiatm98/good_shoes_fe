@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom/client'
 import './assets/styles/index.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
-import { LoadingData } from 'components'
+import { LoadingComponent } from 'components'
 import { BrowserRouter } from 'react-router-dom'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <BrowserRouter>
-    <Suspense fallback={<LoadingData />}>
+    <Suspense fallback={<LoadingComponent />}>
       <React.StrictMode>
         <App />
       </React.StrictMode>

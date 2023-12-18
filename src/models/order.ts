@@ -1,3 +1,5 @@
+import type { CartItemModel } from "./common"
+
 export interface OrderModel {
   id: string
   order_number: string
@@ -36,4 +38,18 @@ export interface OrderModel {
   meta_data: string
   created_at: string
   updated_at: string
+}
+
+export interface OrderCreateRequestModel {
+  customer_first_name: string
+  customer_email: string
+  customer_phone: string
+  customer_company_name: string
+  note: string
+  items: CartItemModel[]
+}
+
+export interface OrderCreateResponseModel {
+  message: string
+  order_id: string
 }

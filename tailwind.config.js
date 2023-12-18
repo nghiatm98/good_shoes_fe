@@ -47,7 +47,8 @@ export default {
         _e8e: '#e8e8e8',
         _f5f: '#f5f5f5',
         _a8a: '#a8a8a8',
-        _128: '#128a09'
+        _128: '#128a09',
+        _e5e: "#e5e5e5",
       },
       fontSize: {
         _10: '10px',

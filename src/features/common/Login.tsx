@@ -1,13 +1,15 @@
 import { ICClose, ICHiddenPasswordPng, ICShowPasswordPng } from 'assets'
-import { ERROR_MESSAGES } from 'common'
+import { ERROR_MESSAGES, saveToken } from 'common'
 import { Button, Input } from 'components'
 import { ModalContext } from 'contexts'
 import { useFormik } from 'formik'
 import { useContext, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { AuthService } from 'services'
 import * as Yup from 'yup'
 
 const LoginPage = () => {
+  const navigate = useNavigate()
   const { hideModal } = useContext(ModalContext)
   const [isShowPassword, setIsShowPassword] = useState(false)
   const formik = useFormik({
@@ -21,8 +23,10 @@ const LoginPage = () => {
     }),
     onSubmit: async (values) => {
       try {
-        const response = await AuthService.login(values)
-        console.log(response)
+        const { token } = await AuthService.login(values)
+        saveToken(token)
+        hideModal()
+        navigate('/manager/products')
       } catch (error) {
       } finally {
       }
@@ -69,7 +73,7 @@ const LoginPage = () => {
             onRemoveAll={() => setFieldValue('password', '')}
           />
         </div>
-        <Button type="submit" label="Create an account" className="!rounded-lg !bg-_f0c !text-black w-full" onClick={handleSubmit} />
+        <Button type="submit" label="Đăng nhập" className="!rounded-lg !bg-_f0c !text-black w-full" onClick={handleSubmit} />
       </div>
     </div>
   )

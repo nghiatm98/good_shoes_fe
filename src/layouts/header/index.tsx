@@ -12,6 +12,7 @@ interface HeaderIconModel {
   icon: JSX.Element
   onClick?: () => void
   element?: JSX.Element
+  information?: JSX.Element
 }
 
 export const Header = () => {

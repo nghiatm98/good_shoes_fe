@@ -1,5 +1,6 @@
 export const apiPath = {
-    products: 'api/v1/products',
+    products: 'products',
     login: 'login',
-    orders: 'api/v1/orders'
+    orders: 'orders',
+    uploads: 'uploads'
 }

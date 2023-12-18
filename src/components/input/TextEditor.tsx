@@ -1,76 +1,69 @@
-// import UploadService from "@/app/_services/upload";
-// import MapImagePath from "@/app/_utils/mapImagePath";
-import { Fragment, memo, useEffect, useRef, useState } from 'react'
+import { memo } from 'react'
+import { CKEditor } from '@ckeditor/ckeditor5-react'
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import { UploadService } from 'services/upload'
 
-interface IEditorProps {
-  value: string
-  onChange: (e: any) => void
+type Props = {
+  content: string
+  onChange?: (content: string) => void
+  required?: boolean
+  label?: string
+  error?: boolean
+  errorMessage?: string
 }
 
-const Editor = memo(({ value, onChange }: IEditorProps) => {
-  const editorRef = useRef<any>({
-    CKEditor: '',
-    ClassicEditor: ''
-  })
-  const [editorLoaded, setEditorLoaded] = useState<Boolean>(false)
-  const { CKEditor, ClassicEditor } = editorRef?.current
-  useEffect(() => {
-    editorRef.current = {
-      CKEditor: require('@ckeditor/ckeditor5-react').CKEditor,
-      ClassicEditor: require('@ckeditor/ckeditor5-build-classic')
-    }
-    setEditorLoaded(true)
-  }, [])
+export const Editor = memo(({ content, onChange, label, required = true, error, errorMessage }: Props) => {
   return (
-    <Fragment>
-      {editorLoaded ? (
-        <CKEditor
-          editor={ClassicEditor}
-          data={value ?? ''}
-          onReady={(_: any) => {
-            // MyCustomUploadAdapterPlugin(editor)
-          }}
-          onChange={(_: any, editor: any) => {
-            const data = editor.getData()
-            onChange?.(data)
-          }}
-        />
-      ) : (
-        <p>Loading...</p>
-      )}
-    </Fragment>
+    <div  className='w-full'>
+      <h4 className="3xl:text-_16 mb-2 3xl:top-0 flex flex-row cursor-text text-main">
+        {label ?? ''}
+        <span style={{ display: required ? 'initial' : 'none' }} className="text-red-600 ml-1 -translate-y-[6px]">
+          *
+        </span>
+      </h4>
+      <CKEditor
+        editor={ClassicEditor}
+        data={content}
+        onReady={(editor: any) => {
+          MyCustomUploadAdapterPlugin(editor)
+        }}
+        onChange={(_: any, editor: any) => {
+          const data = editor.getData()
+          onChange?.(data)
+        }}
+      />
+      {error && <h5 className="text-red-600 mt-1 h-4">{errorMessage}</h5>}
+    </div>
   )
 })
 
-// class MyUploadAdapter {
-//   public loader
-//   constructor(loader: any) {
-//     this.loader = loader
-//   }
+class MyUploadAdapter {
+  public loader
+  constructor(loader: any) {
+    this.loader = loader
+  }
 
-//   upload() {
-//     return this.loader.file.then(async (file: any) => {
-//       const formData = new FormData()
-//       formData.append('file', file)
-//       const imagePath = await UploadService.post({ data: formData })
-//       return new Promise((rj) => {
-//         rj({
-//           urls: {
-//             default: imagePath ? MapImagePath(imagePath[0].fileName) : ''
-//           }
-//         })
-//       })
-//     })
-//   }
+  upload() {
+    return this.loader.file.then(async (file: any) => {
+      const formData = new FormData()
+      formData.append('file', file)
+      const image = await UploadService.upload(formData)
+      return new Promise((rj) => {
+        rj({
+          urls: {
+            default: image ? image.url : ''
+          }
+        })
+      })
+    })
+  }
 
-//   abort() {}
-// }
+  abort() {}
+}
 
-// function MyCustomUploadAdapterPlugin(editor: any) {
-//   editor.plugins.get('FileRepository').createUploadAdapter = (loader: any) => {
-//     // Configure the URL to the upload script in your back-end here!
-//     return new MyUploadAdapter(loader)
-//   }
-// }
-
-export default Editor
+function MyCustomUploadAdapterPlugin(editor: any) {
+  editor.plugins.get('FileRepository').createUploadAdapter = (loader: any) => {
+    // Configure the URL to the upload script in your back-end here!
+    return new MyUploadAdapter(loader)
+  }
+}

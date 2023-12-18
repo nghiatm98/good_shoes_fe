@@ -1,41 +1,140 @@
-import React, { useMemo } from 'react'
-import qs from 'query-string'
-import { ICPaymentError, ICPaymentSuccess } from 'assets'
-import { Button } from 'components'
+// @ts-nocheck
+import { ERROR_MESSAGES } from 'common'
+import { Button, Editor, TitleManager } from 'components'
+import TextInput from 'components/input/TextInput'
+import { CartContext } from 'contexts'
+import { useFormik } from 'formik'
+import { InputTypeModel } from 'models'
+import { useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router'
+import { toast } from 'react-toastify'
+import { OrderService } from 'services'
+import * as Yup from 'yup'
 
-interface IQueriesParams {
-  type?: 'success' | 'error'
-  orderId?: string
-}
+const inputConfigs = [
+  {
+    label: 'Tên',
+    name: 'customer_first_name',
+    type: 'text',
+    placeholder: 'Nhập tên',
+    required: false
+  },
+  {
+    label: 'Email',
+    name: 'customer_email',
+    type: 'text',
+    placeholder: 'Nhập email',
+    required: false
+  },
+  {
+    label: 'Số điện thoại',
+    name: 'customer_phone',
+    type: 'text',
+    placeholder: 'Nhập số điện thoại',
+    required: false
+  },
+  {
+    label: 'Tên công ty',
+    name: 'customer_company_name',
+    type: 'text',
+    placeholder: 'Nhập tên công ty',
+    required: false
+  },
+  {
+    label: 'Ghi chủ',
+    name: 'note',
+    type: 'text',
+    placeholder: 'Nhập ghi chú',
+    required: false,
+    inputType: InputTypeModel.EDITOR
+  }
+]
 
 const PaymentPage = () => {
-  const queryParam: IQueriesParams = qs.parse(location.search)
   const navigate = useNavigate()
+  const { cart, totalQuantity, handleClearAllCart } = useContext(CartContext)
 
-  const detail = useMemo(() => {
-    if (queryParam?.type === 'error')
-      return {
-        icon: <ICPaymentError />,
-        content: <p>Đơn hàng đã thành toán không thành công.</p>
+  const formik = useFormik({
+    initialValues: {
+      customer_first_name: '',
+      customer_email: '',
+      customer_phone: '',
+      customer_company_name: '',
+      note: ''
+    },
+    validationSchema: Yup.object({
+      customer_first_name: Yup.string().required(ERROR_MESSAGES.required),
+      customer_email: Yup.string().required(ERROR_MESSAGES.required).email(ERROR_MESSAGES.email),
+      customer_phone: Yup.string().required(ERROR_MESSAGES.required),
+      customer_company_name: Yup.string().required(ERROR_MESSAGES.required),
+      note: Yup.string().required(ERROR_MESSAGES.required)
+    }),
+    onSubmit: async (values) => {
+      try {
+        const data = {
+          ...values,
+          items: cart
+        }
+        const response = await OrderService.createOrder(data)
+        handleClearAllCart()
+        navigate('/payment-result?type=success&orderId=' + response?.order_id)
+      } catch (error) {
+        navigate('/payment-result?type=error')
       }
-    return {
-      icon: <ICPaymentSuccess />,
-      content: (
-        <p>
-          Đơn hàng {queryParam?.orderId} đã thành toán thành công.
-          <br />
-          Xin cảm ơn.
-        </p>
-      )
     }
-  }, [queryParam])
+  })
+
+  const { values, handleChange, handleSubmit, touched, errors } = formik
+
+  const handleCheckCart = () => {
+    if (totalQuantity) return
+    toast.warning('Vui lòng chọn sản phẩm trước khi thanh toán!')
+    navigate('/products')
+  }
+
+  useEffect(() => {
+    handleCheckCart()
+  }, [])
 
   return (
-    <div className="flex flex-col gap-y-14 text-center justify-center items-center h-[calc(100vh_-_120px)]">
-      {detail?.icon}
-      {detail?.content}
-      <Button className="!h-[51px] !rounded-md !text-_16 !font-normal" label="Quay lại trang chủ" onClick={() => navigate('/')} />
+    <div className="flex flex-col gap-5 p-10 w-[600px]">
+      <TitleManager title="Thanh toán đơn hàng" />
+      <div className="text-_20 text-red-400">
+        Vui lòng điền thông tin thanh toán! <span className="text-red-600 ml-1 -translate-y-[6px]">*</span>
+      </div>
+      <div className="grid grid-cols-1 gap-5">
+        {inputConfigs.map((input, index) => {
+          if (input?.inputType === InputTypeModel.EDITOR) {
+            return (
+              <Editor
+                value={values?.[input.name]}
+                onChange={handleChange}
+                error={Boolean(touched[input.name] && errors[input.name])}
+                errorMessage={errors?.[input.name]}
+                label={input.label}
+                key={index}
+              />
+            )
+          }
+          return (
+            <TextInput
+              value={values?.[input.name]}
+              key={index}
+              field={input.name}
+              placeholder={input.placeholder}
+              onChange={handleChange}
+              label={input.label}
+              type={input.type}
+              error={Boolean(touched[input.name] && errors[input.name])}
+              errorMessage={errors?.[input.name]}
+            />
+          )
+        })}
+      </div>
+      <div className="flex flex-row gap-5 mt-10 mx-auto">
+        <Button label="Lưu thông tin" onClick={handleSubmit} type="submit" className="!h-12 !text-_16" />
+        <Button label="Quay lại" onClick={() => navigate(-1)} type="submit" className="!h-12 !text-_16" />
+      </div>
     </div>
   )
 }

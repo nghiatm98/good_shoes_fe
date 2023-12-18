@@ -7,7 +7,6 @@ import { FilterProduct } from './FilterProduct'
 
 export const ProductContainer = () => {
   const { productsFilter } = useContext(ProductContext)
-  console.log(productsFilter)
   return (
     <div className="container py-9 flex flex-col gap-6">
       <FilterProduct />

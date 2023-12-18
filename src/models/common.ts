@@ -1,3 +1,5 @@
+import type { ProductModel } from "./product"
+
 export interface IconModel {
   color?: string
   width?: number
@@ -19,9 +21,29 @@ export interface ProductParamsModel extends Record<string, unknown> {
   max_price?: string
   brand?: string
   in_stock_only?: string
+  page?: number
+  limit?: number
 }
 
 export interface AuthModel {
   username: string
   password: string
+}
+
+export interface HeaderTableModel {
+  label: string
+  field?: string
+  actions?: {
+    label: string
+    onClick: (pr: any) => void
+  }[]
+}
+
+export interface CartItemModel extends ProductModel {
+  quantity: number
+}
+
+export enum InputTypeModel {
+  TEXT,
+  EDITOR
 }

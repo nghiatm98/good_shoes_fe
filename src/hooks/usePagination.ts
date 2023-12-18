@@ -41,7 +41,6 @@ export const usePagination = ({ totalItems, pageSize = NUMBER_OF_PAGE }: IUsePag
   }
 
   const handleNavigate = () => {
-    console.log(newQueryParam)
     navigate({
       search: qs.stringify(newQueryParam)
     })

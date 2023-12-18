@@ -1,4 +1,4 @@
 export const prefixRootRoute = {
   public: '/',
-  admin: '/manager'
+  manager: '/manager'
 }

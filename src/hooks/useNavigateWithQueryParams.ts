@@ -16,7 +16,6 @@ export const useNavigateWithQueryParams = () => {
     let newQueryParam: ProductParamsModel = queryParam
     arr.forEach((item) => {
       const { field, value } = item
-      console.log(field)
       newQueryParam = {
         ...newQueryParam,
         [field]: value

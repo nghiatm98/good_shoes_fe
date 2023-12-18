@@ -19,7 +19,7 @@ export const useRefreshWeb = () => {
   useEffect(() => {
     window.scrollTo(0, 0)
 
-    if (location.pathname.includes(prefixRootRoute.admin)) {
+    if (location.pathname.includes(prefixRootRoute.manager)) {
       document.body.style.overflowX = 'auto'
     } else {
       document.body.style.overflowX = 'hidden'
