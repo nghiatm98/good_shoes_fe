@@ -14,5 +14,6 @@ export const colors = {
   _1a1: '#1a1a1a',
   _a8a: "#a8a8a8",
   _128: "#128a09",
-  _eb5: "#eb5757"
+  _eb5: "#eb5757",
+  _f53: "#f53f3f"
 }

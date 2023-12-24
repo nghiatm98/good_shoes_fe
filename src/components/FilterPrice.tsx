@@ -3,6 +3,7 @@ import React from 'react'
 import { MultiRangeSlider } from './multipleRangeSlider'
 import { ICSelectArrowDown } from 'assets'
 import { Button } from './button'
+import { log } from 'console'
 
 interface IPriceFilterProps {
   title: string

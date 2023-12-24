@@ -21,11 +21,11 @@ export const CartContext = createContext<CartState>({
   totalQuantity: 0,
 })
 
-interface IProductProviderProps {
+interface ICartProviderProps {
   children: ReactNode
 }
 
-export function CartProvider({ children }: IProductProviderProps) {
+export function CartProvider({ children }: ICartProviderProps) {
   const [cart, setCart] = useState<CartItemModel[]>([])
 
   const handleAddItemCart = (item: ProductModel) => {

@@ -6,6 +6,12 @@ interface ProductPropsModel {
   params?: ProductParamsModel
 }
 
+interface ProductChildrentPropsModel {
+  params?: {
+    product_parent_id?: string
+  }
+}
+
 export const ProductService = {
   getProducts: async ({ params = {} }: ProductPropsModel): Promise<{ items: ProductModel[] }> => {
     return api.get(apiPath.products, { params })
@@ -21,5 +27,8 @@ export const ProductService = {
   },
   deleteProduct: async (id: string | number): Promise<ProductModel> => {
     return api.delete(apiPath.products + '/' + id)
-  }
+  },
+  getProductChildren: async ({ params = {} }: ProductChildrentPropsModel): Promise<{ items: ProductModel[] }> => {
+    return api.get(apiPath.products, { params })
+  },
 }

@@ -14,6 +14,7 @@ export enum InputTypeModel {
 const WrapperProductDetail = () => {
   const params = useParams()
   const [loading, setLoading] = useState<boolean>(false)
+  const [productChildren, setProductChildren] = useState<ProductModel[]>([])
   const [productDetail, setProductDetail] = useState<ProductModel>({} as ProductModel)
 
   const onGetProductDetail = async () => {
@@ -27,14 +28,27 @@ const WrapperProductDetail = () => {
     }
   }
 
+  const onGetProductChildren = async() => {
+    try {
+      if (!params?.id) return
+      const { items } = await ProductService.getProductChildren({
+        params: {
+          product_parent_id: params?.id ?? ''
+        }
+      })
+      setProductChildren(items)
+    } catch (error) {}
+  }
+
   useEffect(() => {
     onGetProductDetail()
+    onGetProductChildren()
   }, [])
 
   if (loading) return <LoadingComponent />
 
   return (
-    <ProductDetail productDetail={productDetail} />
+    <ProductDetail productDetail={productDetail} productChildren={productChildren} />
   )
 }
 

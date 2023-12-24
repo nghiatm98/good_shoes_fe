@@ -9,7 +9,7 @@ const HomePage = () => {
     <div>
       <BannerSlider />
       <OutstandingProduct products={products} />
-      <ProductSuggestion label="Mới Lên kệ!" products={products} />
+      <ProductSuggestion label="Mới Lên kệ!" />
       <TopProduct products={products} />
       <SearchUs />
       <AboutUs />

@@ -4,7 +4,6 @@ export const setStateStorage = (data: any, key: string) => {
   try {
     localStorage.setItem(key, JSON.stringify(data));
   } catch (error) {
-    console.log(error);
   }
 };
 
@@ -21,7 +20,6 @@ export const deleteStateStorage = (key: string) => {
   try {
     return localStorage.removeItem(key);
   } catch (error) {
-    console.log(error);
   }
 };
 
@@ -29,7 +27,6 @@ export const clearStorage = () => {
   try {
     return localStorage.clear();
   } catch (error) {
-    console.log(error);
   }
 };
 

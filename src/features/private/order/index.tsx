@@ -1,10 +1,10 @@
 import { Table, TitleManager } from 'components'
-import type { HeaderTableModel, OrderModel } from 'models'
+import type { HeaderTableModel, OrderModel, OrderStatusModel } from 'models'
 import { useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-toastify'
 import { OrderService } from 'services'
 
-const HEADERS_ORDER = (handleConfirmOrder: (id: number | string) => void): HeaderTableModel[] => [
+const HEADERS_ORDER = (handleConfirmOrder: (id: number | string, status: OrderStatusModel) => void): HeaderTableModel[] => [
   {
     label: 'Mã đơn hàng',
     field: 'order_number'
@@ -63,9 +63,11 @@ const OrderManagement = () => {
     onGetOrders()
   }, [])
 
-  const handleConfirmOrder = async (id: string | number) => {
+  const handleConfirmOrder = async (id: string | number, status: OrderStatusModel) => {
     try {
-      await OrderService.updateOrderStatus(id)
+      await OrderService.updateOrderStatus(id, {
+        status
+      })
       toast.success('Đổi trạng thái thành công!')
     } catch (error) {
       toast.error('Đổi trạng thái thất bại!')
@@ -79,7 +81,7 @@ const OrderManagement = () => {
   return (
     <div>
       <TitleManager title="Quản lý đơn hàng" />
-      <Table headerConfigs={headerConfigs} data={orders} loading={loading} />
+      <Table headerConfigs={headerConfigs} data={orders} loading={loading} isStepAction />
     </div>
   )
 }

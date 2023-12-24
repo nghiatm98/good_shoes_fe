@@ -22,39 +22,36 @@ export const MultiRangeSlider = ({ minValue, maxValue, min, max, step, onChange,
   const getPercent = useCallback((value: any) => Math.round(((value - min) / (max - min)) * 100), [min, max])
 
   useEffect(() => {
-    setMinVal(minValue)
-    setMaxVal(maxValue)
     minValRef.current = minValue
     maxValRef.current = maxValue
-  }, [minValue, maxValue])
+  }, [minValue, maxValue]);
 
   // Set width of the range to decrease from the left side
   useEffect(() => {
-    const minPercent = getPercent(minVal)
-    const maxPercent = getPercent(maxValRef.current)
+    const minPercent = getPercent(minVal);
+    const maxPercent = getPercent(maxValRef.current);
 
     if (range.current) {
-      range.current.style.left = `${minPercent}%`
-      range.current.style.width = `${maxPercent - minPercent}%`
+      range.current.style.left = `${minPercent}%`;
+      range.current.style.width = `${maxPercent - minPercent}%`;
     }
-  }, [minVal, getPercent])
+  }, [minVal, getPercent]);
 
   // Set width of the range to decrease from the right side
   useEffect(() => {
-    const minPercent = getPercent(minValRef.current)
-    const maxPercent = getPercent(maxVal)
+    const minPercent = getPercent(minValRef.current);
+    const maxPercent = getPercent(maxVal);
 
     if (range.current) {
-      range.current.style.width = `${maxPercent - minPercent}%`
+      range.current.style.width = `${maxPercent - minPercent}%`;
     }
-  }, [maxVal, getPercent])
+  }, [maxVal, getPercent]);
 
   // Get min and max values when their state changes
   useEffect(() => {
-    onChange({ min: minVal, max: maxVal })
-  }, [minVal, maxVal])
+    onChange({ min: minVal, max: maxVal });
+  }, [minVal, maxVal]);
 
-  const onBlur = () => {}
 
   return (
     <div className={`container-multi-range-slider ${className}`}>
@@ -64,7 +61,6 @@ export const MultiRangeSlider = ({ minValue, maxValue, min, max, step, onChange,
         max={max}
         step={step}
         value={minVal || 0}
-        onBlur={onBlur}
         onChange={(event) => {
           const value = Math.min(Number(event.target.value), maxVal - step)
           setMinVal(value)

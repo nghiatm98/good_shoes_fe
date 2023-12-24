@@ -4,7 +4,7 @@ import { Button, Editor, TitleManager } from 'components'
 import TextInput from 'components/input/TextInput'
 import { CartContext } from 'contexts'
 import { useFormik } from 'formik'
-import { InputTypeModel } from 'models'
+import { InputTypeModel, OrderStatusModel } from 'models'
 import { useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
@@ -67,13 +67,14 @@ const PaymentPage = () => {
       customer_email: Yup.string().required(ERROR_MESSAGES.required).email(ERROR_MESSAGES.email),
       customer_phone: Yup.string().required(ERROR_MESSAGES.required),
       customer_company_name: Yup.string().required(ERROR_MESSAGES.required),
-      note: Yup.string().required(ERROR_MESSAGES.required)
+      note: Yup.string()
     }),
     onSubmit: async (values) => {
       try {
         const data = {
           ...values,
-          items: cart
+          items: cart,
+          status: OrderStatusModel.NEW
         }
         const response = await OrderService.createOrder(data)
         handleClearAllCart()
@@ -84,7 +85,7 @@ const PaymentPage = () => {
     }
   })
 
-  const { values, handleChange, handleSubmit, touched, errors } = formik
+  const { values, handleChange, handleSubmit, touched, errors, setFieldValue } = formik
 
   const handleCheckCart = () => {
     if (totalQuantity) return
@@ -108,10 +109,11 @@ const PaymentPage = () => {
             return (
               <Editor
                 value={values?.[input.name]}
-                onChange={handleChange}
+                onChange={setFieldValue}
                 error={Boolean(touched[input.name] && errors[input.name])}
                 errorMessage={errors?.[input.name]}
                 label={input.label}
+                field={input.name}
                 key={index}
               />
             )

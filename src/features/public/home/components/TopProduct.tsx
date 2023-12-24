@@ -30,7 +30,7 @@ export const TopProduct = ({ products = [] }: ITopProductProps) => {
                 <div className="flex-1 ">
                   <div className="p-14 text-center flex flex-col gap-4 items-center justify-center h-full">
                     <p className="text-_28 font-semibold">{product?.name}</p>
-                    <p>{product?.description}</p>
+                    <div dangerouslySetInnerHTML={{ __html: product?.description }}></div>
                     <Button label="Xem sản phẩm" onClick={() => navigate("/products/" + product?.id)} />
                   </div>
                 </div>

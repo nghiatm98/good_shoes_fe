@@ -1,12 +1,12 @@
 import { IMGifAdidas } from 'assets'
-import { ProductCard } from 'components'
+import { Pagination, ProductCard } from 'components'
 import { TextNotFound } from 'components/TextNotFound'
 import { ProductContext } from 'contexts'
 import { useContext } from 'react'
 import { FilterProduct } from './FilterProduct'
 
 export const ProductContainer = () => {
-  const { productsFilter } = useContext(ProductContext)
+  const { products ,productsFilter } = useContext(ProductContext)
   return (
     <div className="container py-9 flex flex-col gap-6">
       <FilterProduct />
@@ -25,6 +25,7 @@ export const ProductContainer = () => {
       ) : (
         <TextNotFound />
       )}
+      <Pagination totalItems={products?.length} />
     </div>
   )
 }

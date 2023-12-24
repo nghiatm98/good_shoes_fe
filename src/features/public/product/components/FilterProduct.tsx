@@ -15,8 +15,8 @@ export const FilterProduct = () => {
   const [maxPriceChoose, setMaxPriceChoose] = useState(MAX_PRICE_DEFAULT)
 
   const onChangeFilterPrice = ({ min, max }: any) => {
-    setMinPriceChoose(min)
-    setMaxPriceChoose(max)
+    setMinPriceChoose(Number(min))
+    setMaxPriceChoose(Number(max))
   }
 
   useEffect(() => {
@@ -29,12 +29,12 @@ export const FilterProduct = () => {
       {
         field: 'min_price',
         path: '/products',
-        value: minPriceChoose.toString()
+        value: minPriceChoose
       },
       {
         field: 'max_price',
         path: '/products',
-        value: maxPriceChoose.toString()
+        value: maxPriceChoose
       }
     ])
   }

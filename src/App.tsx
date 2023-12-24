@@ -2,7 +2,7 @@ import { useRefreshWeb } from 'hooks'
 import { Suspense } from 'react'
 import { RouterRoot } from 'routers'
 import { LoadingComponent } from 'components'
-import { CartProvider, ModalProvider, ProductProvider } from 'contexts'
+import { AuthProvider, CartProvider, ModalProvider, ProductProvider } from 'contexts'
 import { ToastContainer } from 'react-toastify'
 import { ErrorBoundary } from 'layouts'
 
@@ -24,13 +24,15 @@ function App() {
         theme="dark"
       />
       <ErrorBoundary>
-        <ModalProvider>
-          <ProductProvider>
-            <CartProvider>
-              <RouterRoot />
-            </CartProvider>
-          </ProductProvider>
-        </ModalProvider>
+        <AuthProvider>
+          <ModalProvider>
+            <ProductProvider>
+              <CartProvider>
+                <RouterRoot />
+              </CartProvider>
+            </ProductProvider>
+          </ModalProvider>
+        </AuthProvider>
       </ErrorBoundary>
     </Suspense>
   )

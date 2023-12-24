@@ -1,9 +1,11 @@
 //@ts-nocheck
+import { ICDelete } from 'assets'
 import { ERROR_MESSAGES } from 'common'
-import { Button, Editor, TitleManager } from 'components'
+import { Button, Editor, Pagination, Table, TitleManager } from 'components'
 import TextInput from 'components/input/TextInput'
-import { FieldArray, FormikProvider, useFormik } from 'formik'
-import { InputTypeModel, ProductCreateRequestModel, type ProductModel } from 'models'
+import { useFormik } from 'formik'
+import { InputTypeModel, ProductOptionTypeModel, type ProductModel } from 'models'
+import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { ProductService } from 'services'
@@ -85,30 +87,107 @@ const inputConfigs = [
   }
 ]
 
+const HEADERS_PRODUCT = [
+  {
+    label: 'Tên sản phẩm',
+    field: 'name'
+  },
+  {
+    label: 'Danh mục',
+    field: 'category'
+  },
+  {
+    label: 'Thương hiệu',
+    field: 'brand'
+  },
+  {
+    label: 'Số lượng',
+    field: 'total_quantity'
+  },
+  {
+    label: 'Giá',
+    field: 'price'
+  },
+  {
+    label: 'Trạng thái',
+    field: 'status'
+  },
+  {
+    label: 'Giảm giá',
+    field: 'sale_price'
+  }
+]
+
 interface IProductDetailProps {
   productDetail?: ProductModel
+  productChildren?: ProductModel[]
 }
 
 interface ParamsProductDetailModel {
   id?: string
 }
 
-const ProductDetail = ({ productDetail }: IProductDetailProps) => {
+const ProductDetail = ({ productDetail, productChildren = [] }: IProductDetailProps) => {
   const params: ParamsProductDetailModel = useParams()
   const navigate = useNavigate()
+  const [images, setImages] = useState<string[]>(productDetail.image_url ? productDetail.image_url.split(',') : [])
+  const [colors, setColors] = useState(productDetail?.options?.find((option) => option.name === ProductOptionTypeModel.COLOR)?.items ?? [])
+  const [sizes, setSizes] = useState(productDetail?.options?.find((option) => option.name === ProductOptionTypeModel.SIZE)?.items ?? [])
+
+  const handleAddRowColor = (index: number) => {
+    const temp = [...colors]
+    temp.splice(index, 0, {
+      label: '',
+      value: ''
+    })
+    setColors(temp)
+  }
+
+  const handleRemoveRowColor = (index: number) => {
+    const temp = [...colors]
+    temp.splice(index, 1)
+    setColors(temp)
+  }
+
+  const handleAddRowSize = (index: number) => {
+    const temp = [...sizes]
+    temp.splice(index, 0, {
+      label: '',
+      value: ''
+    })
+    setSizes(temp)
+  }
+
+  const handleRemoveRowSize = (index: number) => {
+    const temp = [...sizes]
+    temp.splice(index, 1)
+    setSizes(temp)
+  }
+
+  const handleChangeColor = (index: number, field: string, value: string) => {
+    const temp = [...colors]
+    temp[index][field] = value
+    setColors(temp)
+  }
+
+  const handleChangeSize = (index: number, field: string, value: string) => {
+    const temp = [...sizes]
+    temp[index][field] = value
+    setSizes(temp)
+  }
 
   const formik = useFormik({
-    initialValues: ({ ...productDetail } as any) ?? {
-      name: '',
-      price: '',
-      sale_price: '',
-      total_quantity: '',
-      category: '',
-      brand: '',
-      description: '',
-      description2: '',
-      image_url: '',
-      tag: ''
+    initialValues: {
+      name: productDetail?.name ?? '',
+      price: productDetail?.price ?? '',
+      sale_price: productDetail?.sale_price ?? '',
+      total_quantity: productDetail?.total_quantity ?? '',
+      category: productDetail?.category ?? '',
+      brand: productDetail?.brand ?? '',
+      description: productDetail?.description ?? '',
+      description2: productDetail?.description2 ?? '',
+      image_url: productDetail?.image_url ?? '',
+      tag: productDetail?.tag ?? '',
     },
     validationSchema: Yup.object({
       name: Yup.string().required(ERROR_MESSAGES.required),
@@ -119,7 +198,7 @@ const ProductDetail = ({ productDetail }: IProductDetailProps) => {
       brand: Yup.string().required(ERROR_MESSAGES.required),
       description: Yup.string(),
       description2: Yup.string(),
-      image_url: Yup.string().required(ERROR_MESSAGES.required),
+      image_url: Yup.string(),
       tag: Yup.string()
     }),
     onSubmit: async (values) => {
@@ -129,14 +208,29 @@ const ProductDetail = ({ productDetail }: IProductDetailProps) => {
             ...values,
             total_quantity: Number(values.total_quantity),
             sale_price: Number(values.sale_price),
+            image_url: images.join(',')
           })
           toast.success('Sửa sản phẩm thành công !')
+          navigate('/manager/products')
           return
         }
         await ProductService.createProduct({
           ...values,
           total_quantity: Number(values.total_quantity),
           sale_price: Number(values.sale_price),
+          image_url: images.join(','),
+          options: [
+            {
+              name: ProductOptionTypeModel.SIZE,
+              type: ProductOptionTypeModel.SIZE,
+              items: sizes
+            },
+            {
+              name: ProductOptionTypeModel.COLOR,
+              type: ProductOptionTypeModel.COLOR,
+              items: colors
+            }
+          ]
         })
         toast.success('Tạo sản phẩm thành công !')
         navigate('/manager/products')
@@ -158,21 +252,62 @@ const ProductDetail = ({ productDetail }: IProductDetailProps) => {
   const onSelectFile = async (e: any) => {
     if (e?.target?.files && e.target.files.length > 0) {
       try {
-        let formData = new FormData()
-        formData.append('file', e?.target?.files[0])
-        const { url } = await UploadService.upload(formData)
-        setFieldValue('image_url', url)
+        const tempImages = [...e.target.files]
+        if (tempImages?.length > 9 - images.length) {
+          toast.warn('Chỉ có thể upload 9 ảnh cho sản phẩm')
+          return
+        }
+        handleUploadImage(tempImages)
       } catch (err) {}
     }
   }
+
+  const handleUploadImage = async (files: any[]) => {
+    try {
+      let formData = new FormData()
+      Array.from(files).forEach((image) => {
+        formData.append('file', image)
+      })
+      const { url } = await UploadService.upload(formData)
+      setImages([...images, ...url])
+    } catch (err) {
+    }
+  }
+
+  const handleRemoveImage = (index: number) => {
+    const temp = [...images]
+    temp.splice(index, 1)
+    setImages(temp)
+  }
+
   return (
     <div className="flex flex-col gap-5">
       <TitleManager title={params.id ? 'Chi tiết sản phẩm' : 'Thêm sản phẩm'} />
-      <div className="flex flex-col gap-5">
-        <p className="text-_16">Ảnh sản phẩm</p>
-        <div className="w-32 h-32 border border-gray-700 rounded-md cursor-pointer" onClick={handleUploadFile}>
-          <img src={values.image_url} alt="image" className="w-full h-full" />
-          <input hidden id="image" accept="image/*" type="file" onChange={onSelectFile} />
+      {params.id && (
+        <div className="flex flex-col gap-3">
+          <p>Các sản phẩm con:</p>
+          <Table headerConfigs={HEADERS_PRODUCT} data={productChildren} />
+        </div>
+      )}
+      <div className="flex flex-row gap-x-4 items-end">
+        <div className="flex flex-col gap-5">
+          <p className="text-_16">Ảnh sản phẩm</p>
+          <div className="w-32 h-32 border border-gray-700 rounded-md cursor-pointer flex justify-center items-center" onClick={handleUploadFile}>
+            <span>+ {images.length.toString()}/ 9</span>
+            <input hidden id="image" accept="image/*" multiple type="file" onChange={onSelectFile} />
+          </div>
+        </div>
+        <div className="flex flex-row gap-x-4">
+          {images.map((image, index) => {
+            return (
+              <div key={index} className="w-32 h-32 border border-gray-700 cursor-pointer relative">
+                <img src={image} alt="image" className="w-full h-full" />
+                <div className="absolute top-1 right-1" onClick={() => handleRemoveImage(index)}>
+                  <ICDelete />
+                </div>
+              </div>
+            )
+          })}
         </div>
       </div>
       <div className="grid grid-cols-2 gap-5">
@@ -181,10 +316,11 @@ const ProductDetail = ({ productDetail }: IProductDetailProps) => {
             return (
               <Editor
                 value={values?.[input.name]}
-                onChange={handleChange}
+                onChange={setFieldValue}
                 error={Boolean(touched[input.name] && errors[input.name])}
                 errorMessage={errors?.[input.name]}
                 label={input.label}
+                field={input.name}
                 key={index}
               />
             )
@@ -204,67 +340,76 @@ const ProductDetail = ({ productDetail }: IProductDetailProps) => {
           )
         })}
       </div>
-      {/* <div>
-        <p>Các tùy chon:</p>
-        <div>
-          <p>Màu sắc:</p>
-          <div>
-            <FormikProvider value={formik}>
-              <FieldArray
-                validateOnChange={false}
-                name="colorOptions"
-                render={(helpers) => (
-                  <div>
-                    {
-                      <div>
-                        {values.colorOptions.map((_: any, index: number) => {
-                          return (
-                            <div className="flex flex-row gap-x-5" key={index}>
-                              <TextInput
-                                field={`colorOptions.${index}.label`}
-                                onChange={handleChange}
-                                label="Mã màu"
-                                placeholder="Nhập mã màu"
-                                required={false}
-                                value={formik.values.colorOptions[index].label}
-                              />
-                              <TextInput
-                                field={`colorOptions.${index}.value`}
-                                onChange={handleChange}
-                                label="Giá trị"
-                                placeholder="Nhập giá trị"
-                                required={false}
-                                value={formik.values.colorOptions[index].value}
-                              />
-                              <Button
-                                label="- Xóa"
-                                onClick={() => {
-                                  helpers.remove(index)
-                                }}
-                              />
-                              <Button
-                                label="+ Thêm"
-                                onClick={(e) => {
-                                  e.preventDefault()
-                                  helpers.insert(index + 1, {
-                                    label: '',
-                                    value: ''
-                                  })
-                                }}
-                              />
-                            </div>
-                          )
-                        })}
-                        <Button label="+ Thêm" />
-                      </div>
-                    }
+      <div className="flex flex-row">
+        <div className="flex flex-col gap-5 flex-1">
+          <div className="flex flex-row gap-5 items-center">
+            <p className="text-_24">Colors:</p>
+            {!colors.length && !params.id && <Button className="!h-10 !text-_14" label="Thêm" onClick={() => handleAddRowColor(0)} />}
+          </div>
+          <div className="flex flex-col gap-5">
+            {colors.map((color, index) => {
+              return (
+                <div key={index} className="flex flex-row gap-10">
+                  <div className="flex flex-row gap-5">
+                    <TextInput
+                      disabled={params.id}
+                      label="Tên"
+                      value={color.label}
+                      onChange={(e) => handleChangeColor(index, 'label', e.target.value)}
+                    />
+                    <TextInput
+                      disabled={params.id}
+                      label="Giá trị"
+                      value={color.value}
+                      onChange={(e) => handleChangeColor(index, 'value', e.target.value)}
+                    />
                   </div>
-                )}
-              ></FieldArray>
-            </FormikProvider>
+                  {!params.id && (
+                    <div className="flex flex-row gap-5 items-end">
+                      <Button className="!h-10 !text-_14" label="Thêm" onClick={() => handleAddRowColor(index)} />
+                      <Button className="!h-10 !text-_14" label="Xóa" onClick={() => handleRemoveRowColor(index)} />
+                    </div>
+                  )}
+                </div>
+              )
+            })}
           </div>
         </div>
-      </div> */}
+        <div className="flex flex-col gap-5 flex-1">
+          <div className="flex flex-row gap-5 items-center">
+            <p className="text-_24">Sizes:</p>
+            {!sizes.length && !params.id && <Button className="!h-10 !text-_14" label="Thêm" onClick={() => handleAddRowSize(0)} />}
+          </div>
+          <div className="flex flex-col gap-5">
+            {sizes.map((size, index) => {
+              return (
+                <div key={index} className="flex flex-row gap-10">
+                  <div className="flex flex-row gap-5">
+                    <TextInput
+                      disabled={params.id}
+                      label="Tên"
+                      value={size.label}
+                      onChange={(e) => handleChangeSize(index, 'label', e.target.value)}
+                    />
+                    <TextInput
+                      disabled={params.id}
+                      label="Giá trị"
+                      value={size.value}
+                      onChange={(e) => handleChangeSize(index, 'value', e.target.value)}
+                    />
+                  </div>
+                  {!params.id && (
+                    <div className="flex flex-row gap-5 items-end">
+                      <Button className="!h-10 !text-_14" label="Thêm" onClick={() => handleAddRowSize(index)} />
+                      <Button className="!h-10 !text-_14" label="Xóa" onClick={() => handleRemoveRowSize(index)} />
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </div>
       <div className="flex flex-row gap-5 mt-10 mx-auto">
         <Button label="Lưu thông tin" onClick={handleSubmit} type="submit" className="!h-12 !text-_18" />
         <Button label="Quay lại" onClick={() => navigate(-1)} type="submit" className="!h-12 !text-_18" />

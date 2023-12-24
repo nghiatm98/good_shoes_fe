@@ -24,7 +24,7 @@ export const ProductImageList = ({ images = [] }: IProductImageListProps) => {
           )
         })}
       </div>
-      <div className="min-h-[625px] bg-_f5f rounded-xl flex">
+      <div className="min-h-[625px] bg-_f5f rounded-xl flex flex-1">
         <ImageTranslation src={images[indexSelect]} className="transition-all duration-500 rounded-xl" />
       </div>
     </div>

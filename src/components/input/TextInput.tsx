@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import { ERROR_MESSAGES } from 'common'
 
 interface ITextInputProps {
@@ -43,9 +44,14 @@ const TextInput = ({
         value={value}
         placeholder={placeholder}
         id={`input ${field}`}
-        className={`${
-          className + ' '
-        } border-[1px] rounded-md w-full pr-2 pl-2 text-main block py-1.5 px-0 border-blue-500 appearance-none dark:focus:border-blue-500 focus:outline-blue-400 focus:border-blue-600 mb-0`}
+        className={clsx(
+          `${
+            className + ' '
+          } border-[1px] rounded-md w-full pr-2 pl-2 text-main block py-1.5 px-0 border-blue-500 appearance-none dark:focus:border-blue-500 focus:outline-blue-400 focus:border-blue-600 mb-0`,
+          {
+            'cursor-not-allowed': disabled
+          }
+        )}
       />
       {error && <h5 className="text-red-600 mt-1 h-4">{errorMessage}</h5>}
     </div>

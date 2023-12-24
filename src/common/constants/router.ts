@@ -123,13 +123,13 @@ export const privateRouter: IRouter[] = [
   {
     path: pathsManager.products.prefix,
     element: ProductManagementPage,
-    name: 'Quản lý sản phầm',
+    name: 'Quản lý sản phẩm',
     icon: ICNavbarProduct
   },
   {
     path: pathsManager.products.new,
     element: ProductDetailManagementPage,
-    name: 'Quản lý sản phầm',
+    name: 'Quản lý sản phẩm',
     icon: ICNavbarProduct,
     isHidden: true
   },

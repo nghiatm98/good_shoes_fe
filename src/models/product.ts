@@ -21,6 +21,8 @@ export interface ProductModel {
   total_quantity: number
   type: string
   updated_at: string
+  size?: string
+  color?: string
 }
 
 export interface ProductCreateRequestModel {
@@ -38,8 +40,8 @@ export interface ProductCreateRequestModel {
 }
 
 export enum ProductOptionTypeModel {
-  SIZE,
-  COLOR
+  SIZE = "SIZE",
+  COLOR = "COLOR"
 }
 
 export interface ProductOptionModel {

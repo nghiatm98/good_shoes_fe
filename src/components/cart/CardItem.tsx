@@ -16,7 +16,7 @@ export const CardItem = ({ detail, index }: ICardItemProps) => {
         <div className="flex flex-col gap-1 text-_12 font-medium">
           <span className="font-bold">{detail.name}</span>
           <span>{detail.price}</span>
-          <span>{detail?.description}</span>
+          <div dangerouslySetInnerHTML={{ __html: detail.description }}></div>
         </div>
       </div>
       <div className="flex flex-col gap-2">

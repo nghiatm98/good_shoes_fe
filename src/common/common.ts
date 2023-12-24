@@ -15,5 +15,5 @@ export function filterUniqueElements<T>(array: T[]): T[] {
 }
 
 export function calculatePercentage(num1: number, num2: number) {
-  return (num1 / num2) * 100;
+  return ( ((Number(num2) - Number(num1)) / Number(num2)) * 100).toFixed(2);
 }

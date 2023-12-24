@@ -1,4 +1,4 @@
-import { filterUniqueElements } from 'common'
+import { NUMBER_OF_PAGE, filterUniqueElements } from 'common'
 import type { OrderModel, ProductModel, ProductParamsModel, RouterModel } from 'models'
 import qs from 'query-string'
 import { ReactNode, createContext, useEffect, useMemo, useState } from 'react'
@@ -34,14 +34,25 @@ export function ProductProvider({ children }: IProductProviderProps) {
 
   const onGetProducts = async (params: ProductParamsModel) => {
     try {
-      const { items = [] } = await ProductService.getProducts({ params })
+      const { items = [] } = await ProductService.getProducts({
+        params: {
+          page: 1,
+          limit: NUMBER_OF_PAGE,
+          ...params
+        }
+      })
       setProductsFilter(items)
     } catch (error) {}
   }
 
   const onGetAllProducts = async () => {
     try {
-      const { items = [] } = await ProductService.getProducts({})
+      const { items = [] } = await ProductService.getProducts({
+        params: {
+          page: 1,
+          limit: 999999999
+        }
+      })
       setProducts(items)
     } catch (error) {}
   }
@@ -95,7 +106,7 @@ export function ProductProvider({ children }: IProductProviderProps) {
 
   useEffect(() => {
     onGetProducts(queryParam)
-  }, [queryParam?.category, queryParam?.brand, queryParam?.max_price, queryParam?.min_price])
+  }, [queryParam?.category, queryParam?.brand, queryParam?.max_price, queryParam?.min_price, queryParam?.page])
 
   return (
     <ProductContext.Provider

@@ -4,15 +4,16 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { UploadService } from 'services/upload'
 
 type Props = {
-  content: string
-  onChange?: (content: string) => void
+  value: string
+  onChange?: (field: string, value: string) => void
   required?: boolean
   label?: string
   error?: boolean
   errorMessage?: string
+  field?: string
 }
 
-export const Editor = memo(({ content, onChange, label, required = true, error, errorMessage }: Props) => {
+export const Editor = memo(({ value, onChange, label, required = true, error, errorMessage , field = '' }: Props) => {
   return (
     <div  className='w-full'>
       <h4 className="3xl:text-_16 mb-2 3xl:top-0 flex flex-row cursor-text text-main">
@@ -23,13 +24,13 @@ export const Editor = memo(({ content, onChange, label, required = true, error, 
       </h4>
       <CKEditor
         editor={ClassicEditor}
-        data={content}
+        data={value}
         onReady={(editor: any) => {
           MyCustomUploadAdapterPlugin(editor)
         }}
         onChange={(_: any, editor: any) => {
           const data = editor.getData()
-          onChange?.(data)
+          onChange?.(field, data)
         }}
       />
       {error && <h5 className="text-red-600 mt-1 h-4">{errorMessage}</h5>}

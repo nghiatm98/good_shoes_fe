@@ -2,7 +2,7 @@ import { ICArrowDown, ICCart, ICSearch, ICUser } from 'assets'
 import clsx from 'clsx'
 import { HEADERS } from 'common'
 import { Cart, Logo, SubNav } from 'components'
-import { ModalContext, ProductContext } from 'contexts'
+import { AuthContext, ModalContext, ProductContext } from 'contexts'
 import LoginPage from 'features/common/Login'
 import { useContext, useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -19,12 +19,16 @@ export const Header = () => {
   const { pathname } = useLocation()
   const { setElementModal, isShow } = useContext(ModalContext)
   const { categoriesRouter } = useContext(ProductContext)
+  const { userInfo } = useContext(AuthContext)
   const HEADER_ICONS = useMemo(
     (): HeaderIconModel[] => [
       {
         id: 1,
-        icon: <ICUser />,
-        onClick: () => setElementModal(<LoginPage />)
+        icon: userInfo.image ? <img alt="" src={userInfo.image} className="h-8 w-8 rounded-[50%] translate-y-[3px]" /> : <ICUser />,
+        onClick: () => {
+          if (userInfo.email) return navigate("/manager/products")
+          setElementModal(<LoginPage />)
+        }
       },
       {
         id: 2,
@@ -59,7 +63,7 @@ export const Header = () => {
             )
           })}
         </div>
-        <div className="flex flex-row">
+        <div className="flex flex-row items-center">
           {HEADER_ICONS.map((item) => {
             return (
               <div key={item.id} className="relative group" onClick={() => item?.onClick?.()} onKeyDown={() => {}}>

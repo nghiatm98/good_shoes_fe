@@ -28,7 +28,7 @@ export const ProductDetailMain = () => {
   }, [])
 
   const productImages = useMemo((): string[] => {
-    return [productDetail.image_url]
+    return productDetail.image_url ? productDetail.image_url.split(',') : []
   }, [productDetail])
 
   if (loadng) {
@@ -38,7 +38,7 @@ export const ProductDetailMain = () => {
   return (
     <div className="container py-16 flex flex-row gap-x-20">
       <ProductImageList images={productImages} />
-      <ProductDetailFilter productDetail={productDetail} images={productImages} />
+      <ProductDetailFilter productDetail={productDetail} />
     </div>
   )
 }

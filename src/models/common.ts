@@ -1,4 +1,4 @@
-import type { ProductModel } from "./product"
+import type { ProductModel } from './product'
 
 export interface IconModel {
   color?: string
@@ -35,7 +35,7 @@ export interface HeaderTableModel {
   field?: string
   actions?: {
     label: string
-    onClick: (pr: any) => void
+    onClick: Function
   }[]
 }
 
@@ -46,4 +46,12 @@ export interface CartItemModel extends ProductModel {
 export enum InputTypeModel {
   TEXT,
   EDITOR
+}
+
+export enum OrderStatusModel {
+  NEW = 'new',
+  CONFIRMED = 'confirmed',
+  PROCESSING = 'processing',
+  COMPLETED = 'completed',
+  CANCELED = 'canceled'
 }

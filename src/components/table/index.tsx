@@ -1,16 +1,47 @@
 import clsx from 'clsx'
 import { Button } from 'components/button'
 import { LoadingComponent } from 'components/loading'
-import type { HeaderTableModel } from 'models'
+import { OrderStatusModel, type HeaderTableModel } from 'models'
 import React from 'react'
 
 interface ITableProps {
   headerConfigs: HeaderTableModel[]
   data: any[]
   loading?: boolean
+  isStepAction?: boolean
 }
 
-export const Table = ({ headerConfigs = [], data = [], loading = false }: ITableProps) => {
+const rederOrderStatus = (item: any) => {
+  switch (item.status as OrderStatusModel) {
+    case OrderStatusModel.NEW:
+      return {
+        label: 'Xác nhận',
+        value: OrderStatusModel.CONFIRMED
+      }
+    case OrderStatusModel.CONFIRMED:
+      return {
+        label: 'Đang tiến hành',
+        value: OrderStatusModel.PROCESSING
+      }
+    case OrderStatusModel.PROCESSING:
+      return {
+        label: 'Hoàn thành',
+        value: OrderStatusModel.COMPLETED
+      }
+    case OrderStatusModel.COMPLETED:
+      return {
+        label: 'Hủy',
+        value: OrderStatusModel.CANCELED
+      }
+    default:
+      return {
+        label: 'Xác nhận',
+        value: OrderStatusModel.CONFIRMED
+      }
+  }
+}
+
+export const Table = ({ headerConfigs = [], data = [], loading = false, isStepAction = false }: ITableProps) => {
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -41,20 +72,18 @@ export const Table = ({ headerConfigs = [], data = [], loading = false }: ITable
                           'flex justify-center items-center gap-x-4': header.actions
                         })}
                       >
-                        {!header.actions ? (
-                          item[header.field ?? '']
-                        ) : (
-                            header.actions.map((action) => {
+                        {!header.actions
+                          ? item[header.field ?? '']
+                          : header.actions.map((action) => {
                               return (
                                 <Button
                                   key={idx}
                                   className="!h-8 !text-_10"
-                                  label={action.label}
-                                  onClick={() => action && action.onClick(item?.id)}
+                                  label={isStepAction ? rederOrderStatus(item).label : action.label}
+                                  onClick={() => action && action.onClick(item?.id, rederOrderStatus(item).value)}
                                 />
                               )
-                            })
-                        )}
+                            })}
                       </td>
                     )
                   })}
