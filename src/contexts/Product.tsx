@@ -45,32 +45,28 @@ export function ProductProvider({ children }: IProductProviderProps) {
     } catch (error) {}
   }
 
-  const onGetAllProducts = async () => {
+  const onGetAllProducts = async (params?: ProductParamsModel) => {
     try {
       const { items = [] } = await ProductService.getProducts({
         params: {
+          ...params,
           page: 1,
-          limit: 999999999
+          limit: 999999999,
         }
       })
       setProducts(items)
+      if (!params) {
+        const categories = items.map((item) => {
+          return item.category
+        })
+        const brands = items.map((item) => {
+          return item.brand
+        })
+        setCategories(filterUniqueElements<string>(categories))
+        setBrands(filterUniqueElements<string>(brands))
+      }
     } catch (error) {}
   }
-
-  const onGetFilterList = () => {
-    const categories = products.map((item) => {
-      return item.category
-    })
-    const brands = products.map((item) => {
-      return item.brand
-    })
-    setCategories(filterUniqueElements<string>(categories))
-    setBrands(filterUniqueElements<string>(brands))
-  }
-
-  useEffect(() => {
-    onGetFilterList()
-  }, [products])
 
   const categoriesRouter = useMemo((): RouterModel[] => {
     return categories.map((category) => {
@@ -83,11 +79,11 @@ export function ProductProvider({ children }: IProductProviderProps) {
   }, [categories])
 
   const brandsRouter = useMemo((): RouterModel[] => {
-    return brands.map((crand) => {
+    return brands.map((brand) => {
       return {
-        label: crand,
+        label: brand,
         path: '/products',
-        value: crand
+        value: brand
       }
     })
   }, [categories])
@@ -100,12 +96,15 @@ export function ProductProvider({ children }: IProductProviderProps) {
   }
 
   useEffect(() => {
-    onGetAllProducts()
     onGetOrders()
+    onGetAllProducts()
   }, [])
+
+  console.log(products)
 
   useEffect(() => {
     onGetProducts(queryParam)
+    onGetAllProducts(queryParam)
   }, [queryParam?.category, queryParam?.brand, queryParam?.max_price, queryParam?.min_price, queryParam?.page])
 
   return (

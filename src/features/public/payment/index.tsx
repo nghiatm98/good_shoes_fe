@@ -34,10 +34,10 @@ const inputConfigs = [
     required: false
   },
   {
-    label: 'Tên công ty',
-    name: 'customer_company_name',
+    label: 'Địa chỉ',
+    name: 'address',
     type: 'text',
-    placeholder: 'Nhập tên công ty',
+    placeholder: 'Nhập địa chỉ',
     required: false
   },
   {
@@ -59,14 +59,14 @@ const PaymentPage = () => {
       customer_first_name: '',
       customer_email: '',
       customer_phone: '',
-      customer_company_name: '',
+      address: '',
       note: ''
     },
     validationSchema: Yup.object({
       customer_first_name: Yup.string().required(ERROR_MESSAGES.required),
       customer_email: Yup.string().required(ERROR_MESSAGES.required).email(ERROR_MESSAGES.email),
       customer_phone: Yup.string().required(ERROR_MESSAGES.required),
-      customer_company_name: Yup.string().required(ERROR_MESSAGES.required),
+      address: Yup.string().required(ERROR_MESSAGES.required),
       note: Yup.string()
     }),
     onSubmit: async (values) => {

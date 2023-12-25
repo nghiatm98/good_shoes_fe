@@ -9,7 +9,7 @@ interface IPaginationProps {
   pageSize?: number
 }
 
-export const Pagination = ({ totalItems, pageSize = NUMBER_OF_PAGE }: IPaginationProps) => {
+export const Pagination = ({ totalItems = 0, pageSize = NUMBER_OF_PAGE }: IPaginationProps) => {
   const { currentPage, handleNextPage, handlePrevPage, disabledNextPage, disabledPrevPage, totalPage } = usePagination({ totalItems, pageSize })
 
   if (totalItems <= pageSize) return <></>
