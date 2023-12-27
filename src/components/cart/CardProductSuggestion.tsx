@@ -11,7 +11,7 @@ export const CardProductSuggestion = ({ detail }: ICardProductSuggestionProps) =
   return (
     <div className="flex flex-row justify-between items-center cursor-pointer gap-x-5">
       <div className="flex flex-row gap-4 items-center">
-        <img src={detail.image_url} className='h-24 w-24 rounded-md' />
+        <img src={detail.image_url ? detail.image_url.split(',')[0] : ''} className='h-24 w-24 rounded-md' />
         <div className="flex flex-col gap-1 text-_12 font-medium">
           <span className="font-bold">{detail.name}</span>
           <span>{detail.price}</span>

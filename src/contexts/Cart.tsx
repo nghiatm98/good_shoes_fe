@@ -80,7 +80,7 @@ export function CartProvider({ children }: ICartProviderProps) {
   }
 
   const totalPrice = useMemo(() => {
-    return formatNumberDot(cart.reduce((acc, curr) => acc + (curr.price - curr.sale_price) * curr.quantity, 0))
+    return formatNumberDot(cart.reduce((acc, curr) => acc + (curr.price - Number(curr.sale_price)) * curr.quantity, 0))
   }, [cart])
 
   const totalQuantity = useMemo(() => {

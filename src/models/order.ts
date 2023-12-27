@@ -1,4 +1,5 @@
 import type { CartItemModel } from "./common"
+import type { ProductModel } from "./product"
 
 export interface OrderModel {
   id: string
@@ -38,6 +39,7 @@ export interface OrderModel {
   meta_data: string
   created_at: string
   updated_at: string
+  items: ProductModel[]
 }
 
 export interface OrderCreateRequestModel {

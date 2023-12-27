@@ -13,7 +13,7 @@ const NavbarItem = ({ item }: INavBarItemProps) => {
     <div
       className={clsx('cursor-pointer py-2 hover:bg-_e5e', {
         'mt-6': item.icon,
-        'bg-_e5e': item.path === pathname.slice(7),
+        'bg-_e5e': pathname.includes(item.path),
         'opacity-50': item?.disabled
       })}
       onClick={() => {

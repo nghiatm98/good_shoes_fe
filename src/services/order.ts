@@ -16,5 +16,8 @@ export const OrderService = {
   },
   createOrder: async (data: OrderCreateRequestModel): Promise<OrderCreateResponseModel> => {
     return api.post(apiPath.orders, data)
-  }
+  },
+  getOrderDetail: async (id: string | number): Promise<OrderModel> => {
+    return api.get(apiPath.orders + '/' + id)
+  },
 }
