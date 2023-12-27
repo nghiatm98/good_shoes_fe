@@ -44,7 +44,7 @@ export interface HeaderTableModel {
 }
 
 export interface CartItemModel extends ProductModel {
-  quantity: number
+  qty_ordered: number
 }
 
 export enum InputTypeModel {

@@ -90,7 +90,8 @@ export function ProductProvider({ children }: IProductProviderProps) {
 
   const onGetOrders = async () => {
     try {
-      const { items } = await OrderService.getOrders()
+      const { items } = await OrderService.getOrders({ page: 1,
+        limit: 999999999, })
       setOrders(items)
     } catch (error) {}
   }

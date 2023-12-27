@@ -52,7 +52,7 @@ const inputConfigs = [
 
 const PaymentPage = () => {
   const navigate = useNavigate()
-  const { cart, totalQuantity, handleClearAllCart } = useContext(CartContext)
+  const { cart, totalQuantity, handleClearAllCart, totalPrice } = useContext(CartContext)
 
   const formik = useFormik({
     initialValues: {
@@ -74,6 +74,8 @@ const PaymentPage = () => {
         const data = {
           ...values,
           items: cart,
+          total_item_qty: totalQuantity,
+          grand_total: totalPrice,
           status: OrderStatusModel.NEW
         }
         const response = await OrderService.createOrder(data)

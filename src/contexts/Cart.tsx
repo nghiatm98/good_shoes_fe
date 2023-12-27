@@ -8,7 +8,7 @@ interface CartState {
   handleAddItemCart: (item: ProductModel) => void
   handleRemoveItemCart: (index: number) => void
   handleClearAllCart: () => void
-  totalPrice: string
+  totalPrice: number | string
   totalQuantity: number
 }
 
@@ -17,7 +17,7 @@ export const CartContext = createContext<CartState>({
   handleAddItemCart: () => {},
   handleRemoveItemCart: () => {},
   handleClearAllCart: () => {},
-  totalPrice: '0',
+  totalPrice: 0,
   totalQuantity: 0,
 })
 
@@ -38,7 +38,7 @@ export function CartProvider({ children }: ICartProviderProps) {
         ...temp,
         {
           ...item,
-          quantity: 1
+          qty_ordered: 1
         }
       ])
     } else {
@@ -46,7 +46,7 @@ export function CartProvider({ children }: ICartProviderProps) {
         if (idx === index)
           return {
             ...cartItem,
-            quantity: cartItem.quantity + 1
+            qty_ordered: cartItem.qty_ordered + 1
           }
   
         return cartItem
@@ -58,7 +58,7 @@ export function CartProvider({ children }: ICartProviderProps) {
 
   const handleRemoveItemCart = (index: number) => {
     const temp = [...cart]
-    if (temp[index].quantity === 1) {
+    if (temp[index].qty_ordered === 1) {
       temp.splice(index, 1)
       setCart(temp)
       return
@@ -67,7 +67,7 @@ export function CartProvider({ children }: ICartProviderProps) {
       if (idx === index)
         return {
           ...cartItem,
-          quantity: cartItem.quantity - 1
+          qty_ordered: cartItem.qty_ordered - 1
         }
 
       return cartItem
@@ -80,11 +80,11 @@ export function CartProvider({ children }: ICartProviderProps) {
   }
 
   const totalPrice = useMemo(() => {
-    return formatNumberDot(cart.reduce((acc, curr) => acc + (curr.price - Number(curr.sale_price)) * curr.quantity, 0))
+    return cart.reduce((acc, curr) => acc + ((curr.sale_price ? curr.sale_price : curr.price) as number) * curr.qty_ordered, 0)
   }, [cart])
 
   const totalQuantity = useMemo(() => {
-    return cart.reduce((acc, curr) => acc + curr.quantity, 0)
+    return cart.reduce((acc, curr) => acc + curr.qty_ordered, 0)
   }, [cart])
 
   return (

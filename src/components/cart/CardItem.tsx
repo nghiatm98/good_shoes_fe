@@ -20,7 +20,7 @@ export const CardItem = ({ detail, index }: ICardItemProps) => {
         </div>
       </div>
       <div className="flex flex-col gap-2">
-        <div className="px-3 rounded border flex items-center justify-center border-black">{detail.quantity}</div>
+        <div className="px-3 rounded border flex items-center justify-center border-black">{detail.qty_ordered}</div>
         <span className="cursor-pointer underline outline-offset-4 text-_14" onClick={() => handleRemoveItemCart(index)}>Gỡ bỏ</span>
       </div>
     </div>

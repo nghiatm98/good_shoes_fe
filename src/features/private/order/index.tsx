@@ -5,6 +5,7 @@ import { toast } from 'react-toastify'
 import { OrderService } from 'services'
 import OrderDetail from './orderDetail'
 import { ModalContext } from 'contexts'
+import { formatNumberDot } from 'common'
 
 const HEADERS_ORDER = (handleConfirmOrder: (id: number | string, status: OrderStatusModel) => void, setElementModal: Function): HeaderTableModel[] => [
   {
@@ -21,7 +22,7 @@ const HEADERS_ORDER = (handleConfirmOrder: (id: number | string, status: OrderSt
   },
   {
     label: 'Tổng giá tiền',
-    field: 'total_item_count'
+    field: 'grand_total'
   },
   {
     label: 'Tên người dùng',
@@ -89,8 +90,12 @@ const OrderManagement = () => {
   const onGetOrders = async () => {
     try {
       setLoading(true)
-      const { items } = await OrderService.getOrders()
-      setOrders(items)
+      const { items } = await OrderService.getOrders({ page: 1, limit: 999999999 })
+      const dataMapping = items.map((item) => ({
+        ...item,
+        grand_total: formatNumberDot(item.grand_total) + ' VNĐ'
+      }))
+      setOrders(dataMapping)
     } catch (error) {
     } finally {
       setLoading(false)

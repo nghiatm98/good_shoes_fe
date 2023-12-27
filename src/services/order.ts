@@ -7,8 +7,8 @@ interface OrderUpdateStatusRequestModel {
 }
 
 export const OrderService = {
-  getOrders: async (): Promise<{ items: OrderModel[] }> => {
-    return api.get(apiPath.orders)
+  getOrders: async (params?: any): Promise<{ items: OrderModel[] }> => {
+    return api.get(apiPath.orders, { params })
   },
 
   updateOrderStatus: async (id: string | number, data: OrderUpdateStatusRequestModel): Promise<any> => {

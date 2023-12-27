@@ -8,7 +8,7 @@ interface ProductPropsModel {
 
 interface ProductChildrentPropsModel {
   params?: {
-    product_parent_id?: string
+    parent_id?: string
   }
 }
 
