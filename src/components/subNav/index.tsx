@@ -6,14 +6,23 @@ import type { RouterModel } from 'models'
 interface ISubNavProps {
   list: RouterModel[] | undefined
   field: string
+  notActive?: boolean
+  id?: string | number
 }
 
-export const SubNav = ({ list = [], field = '' }: ISubNavProps) => {
+export const SubNav = ({ list = [], field = '', notActive = false, id = '' }: ISubNavProps) => {
+  const handleClick = (item: RouterModel) => {
+    if (item?.onClick) {
+      item.onClick(id)
+      return
+    }
+    handleChangeQuery([{ field, path: item.path, value: item.value || '' }])
+  }
   const { queryParam, handleChangeQuery } = useNavigateWithQueryParams()
 
   return (
     <div
-      className="absolute top-full min-w-full w-auto bg-_000_6 rounded-md h-0 overflow-hidden transition-all duration-500 sub-nav text-white"
+      className="absolute z-20 top-full min-w-full w-auto bg-_000_6 rounded-md h-0 overflow-hidden transition-all duration-500 sub-nav text-white"
       style={{
         ['--length-sub-nav' as string]: list?.length
       }}
@@ -22,11 +31,11 @@ export const SubNav = ({ list = [], field = '' }: ISubNavProps) => {
         return (
           <div
             key={index}
-            onClick={() => handleChangeQuery([{ field, path: item.path, value: item.value || '' }])}
+            onClick={() => handleClick(item)}
             className={clsx('px-2 whitespace-nowrap h-10 flex items-center hover:bg-white hover:text-black transition-all duration-300', {
               'rounded-t-md': !index,
               'rounded-b-md': index + 1 === list?.length,
-              'bg-white text-black': item?.value === queryParam?.[field]
+              'bg-white text-black': item?.value === queryParam?.[field] && !notActive
             })}
           >
             {item.label}

@@ -16,8 +16,8 @@ export const ProductService = {
   getProducts: async ({ params = {} }: ProductPropsModel): Promise<{ items: ProductModel[] }> => {
     return api.get(apiPath.products, { params })
   },
-  getProductDetail: async (id: string): Promise<ProductModel> => {
-    return api.get(apiPath.products + '/' + id)
+  getProductDetail: async (id: string, params?: ProductParamsModel): Promise<ProductModel> => {
+    return api.get(apiPath.products + '/' + id, { params })
   },
   createProduct: async (data: ProductCreateRequestModel): Promise<ProductModel> => {
     return api.post(apiPath.products, data)

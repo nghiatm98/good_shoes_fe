@@ -2,11 +2,11 @@ import clsx from 'clsx'
 import { ERROR_MESSAGES } from 'common'
 
 interface ITextInputProps {
-  field: string
-  placeholder: string
+  field?: string
+  placeholder?: string
   type?: string
   errorMessage?: string
-  value: string
+  value: string | number
   onChange: (e: any) => void
   className?: string
   disabled?: boolean

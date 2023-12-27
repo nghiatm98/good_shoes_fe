@@ -3,7 +3,7 @@ import { api } from './api'
 
 interface UploadResponseModel {
   message: string
-  url: string
+  url: string[]
 }
 
 export const UploadService = {

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 interface ChangeQueryModel {
   field: string
-  path: string
+  path?: string
   value: string | number
 }
 

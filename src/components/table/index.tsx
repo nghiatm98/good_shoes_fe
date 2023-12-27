@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import { Button } from 'components/button'
 import { LoadingComponent } from 'components/loading'
+import { Select } from 'features/public/product/components/Select'
 import { OrderStatusModel, type HeaderTableModel } from 'models'
 import React from 'react'
 
@@ -11,37 +12,7 @@ interface ITableProps {
   isStepAction?: boolean
 }
 
-const rederOrderStatus = (item: any) => {
-  switch (item.status as OrderStatusModel) {
-    case OrderStatusModel.NEW:
-      return {
-        label: 'Xác nhận',
-        value: OrderStatusModel.CONFIRMED
-      }
-    case OrderStatusModel.CONFIRMED:
-      return {
-        label: 'Đang tiến hành',
-        value: OrderStatusModel.PROCESSING
-      }
-    case OrderStatusModel.PROCESSING:
-      return {
-        label: 'Hoàn thành',
-        value: OrderStatusModel.COMPLETED
-      }
-    case OrderStatusModel.COMPLETED:
-      return {
-        label: 'Hủy',
-        value: OrderStatusModel.CANCELED
-      }
-    default:
-      return {
-        label: 'Xác nhận',
-        value: OrderStatusModel.CONFIRMED
-      }
-  }
-}
-
-export const Table = ({ headerConfigs = [], data = [], loading = false, isStepAction = false }: ITableProps) => {
+export const Table = ({ headerConfigs = [], data = [], loading = false }: ITableProps) => {
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -75,12 +46,16 @@ export const Table = ({ headerConfigs = [], data = [], loading = false, isStepAc
                         {!header.actions
                           ? item[header.field ?? '']
                           : header.actions.map((action) => {
+                              if (action.list) {
+                                if (![OrderStatusModel.COMPLETED,  OrderStatusModel.CANCELED]?.includes(item?.status)) return <Select key={idx} notActive id={item?.id} label={action.label} list={action.list} field="" />
+                                return <span key={idx}>Không thể thay đổi</span>
+                              }
                               return (
                                 <Button
                                   key={idx}
                                   className="!h-8 !text-_10"
-                                  label={isStepAction ? rederOrderStatus(item).label : action.label}
-                                  onClick={() => action && action.onClick(item?.id, rederOrderStatus(item).value)}
+                                  label={action.label}
+                                  onClick={() => action && action.onClick && action.onClick(item?.id)}
                                 />
                               )
                             })}

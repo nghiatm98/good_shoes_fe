@@ -100,8 +100,6 @@ export function ProductProvider({ children }: IProductProviderProps) {
     onGetAllProducts()
   }, [])
 
-  console.log(products)
-
   useEffect(() => {
     onGetProducts(queryParam)
     onGetAllProducts(queryParam)

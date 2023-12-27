@@ -4,7 +4,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { UploadService } from 'services/upload'
 
 type Props = {
-  value: string
+  value: any
   onChange?: (field: string, value: string) => void
   required?: boolean
   label?: string

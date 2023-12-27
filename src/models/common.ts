@@ -5,7 +5,7 @@ export interface IconModel {
   width?: number
   height?: number
   className?: string
-  onClick?: () => void
+  onClick?: Function
 }
 
 export interface RouterModel {
@@ -13,6 +13,7 @@ export interface RouterModel {
   path: string
   value?: string
   childrens?: RouterModel[]
+  onClick?: Function
 }
 
 export interface ProductParamsModel extends Record<string, unknown> {
@@ -23,6 +24,8 @@ export interface ProductParamsModel extends Record<string, unknown> {
   in_stock_only?: string
   page?: number
   limit?: number
+  color?: string
+  size?: string
 }
 
 export interface AuthModel {
@@ -35,7 +38,8 @@ export interface HeaderTableModel {
   field?: string
   actions?: {
     label: string
-    onClick: Function
+    onClick?: Function
+    list?: RouterModel[]
   }[]
 }
 

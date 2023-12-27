@@ -2,7 +2,9 @@ import { ICFacebook, ICInstagram, ICSendMail, ICTiktok, IMNotifycation, IMRegist
 import { FOOTER_ROUTERS } from 'common'
 import { Logo } from 'components'
 import { ProductContext } from 'contexts'
+import { useNavigateWithQueryParams } from 'hooks'
 import { SendMailInput } from 'layouts'
+import type { RouterModel } from 'models'
 import React, { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -12,6 +14,12 @@ export const LOGOS = [IMNotifycation, IMRegister]
 export const Footer = () => {
   const navigate = useNavigate()
   const { categoriesRouter } = useContext(ProductContext)
+  const { handleChangeQuery } = useNavigateWithQueryParams()
+  const handleRouterPath = (item: RouterModel) => {
+    if (!item.value) return navigate(item.path)
+    handleChangeQuery([{ field: 'category', value: item.value, path: 'products' }])
+  }
+
   return (
     <div className="bg-black w-full py-16 text-white font-gilroy">
       <div className="container flex flex-col gap-y-4">
@@ -32,7 +40,7 @@ export const Footer = () => {
                 <div className="flex flex-col">
                   {item.childrens.map((child) => {
                     return (
-                      <div className="cursor-pointer leading-8" onClick={() => navigate(child.path)} onKeyDown={() => {}} key={child?.label}>
+                      <div className="cursor-pointer leading-8" onClick={() => handleRouterPath(child)} onKeyDown={() => {}} key={child?.label}>
                         {child.label}
                       </div>
                     )

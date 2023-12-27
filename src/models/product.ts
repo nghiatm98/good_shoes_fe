@@ -14,11 +14,11 @@ export interface ProductModel {
   name: string
   options: ProductOptionModel[]
   price: number
-  sale_price: number
+  sale_price: number | string
   sku: string
   status: string
   tag: string
-  total_quantity: number
+  total_quantity: number | string
   type: string
   updated_at: string
   size?: string
@@ -26,17 +26,17 @@ export interface ProductModel {
 }
 
 export interface ProductCreateRequestModel {
-  brand: string
-  category: string
-  description: string
-  description2: string
-  image_url: string
-  name: string
+  brand?: string
+  category?: string
+  description?: string
+  description2?: string
+  image_url?: string
+  name?: string
   options?: ProductOptionModel[]
-  price: string
-  sale_price: string
+  price?: string | number
+  sale_price: number
   tag?: string
-  total_quantity: string
+  total_quantity?: number
 }
 
 export enum ProductOptionTypeModel {
@@ -45,19 +45,20 @@ export enum ProductOptionTypeModel {
 }
 
 export interface ProductOptionModel {
-  id: string
+  id?: string
   name: string
-  product_id: string
-  key: string
+  product_id?: string
+  key?: string
   type: ProductOptionTypeModel
-  price: string
+  price?: string
   items: ProductOptionItemModel[]
-  created_at: string
+  created_at?: string
 }
 
 export interface ProductOptionItemModel {
-  id: string
+  id?: string
   label: string
   value: string
-  created_at: string
+  created_at?: string
+  image_url?: string
 }
