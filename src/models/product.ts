@@ -23,6 +23,9 @@ export interface ProductModel {
   updated_at: string
   size?: string
   color?: string
+  product_id?: string
+  parent_product_id?: string
+  parent_id?: string
 }
 
 export interface ProductCreateRequestModel {

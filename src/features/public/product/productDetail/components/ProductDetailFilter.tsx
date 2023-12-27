@@ -103,9 +103,9 @@ export const ProductDetailFilter = ({ productDetail }: IProductDetailFilterProps
           disabled={!productDetail.total_quantity}
           onClick={() =>
             handleAddItemCart({
-              ...productDetail
-              // size: sizes[indexSizeSelect].value,
-              // color: colors[indexColorSelect].value
+              ...productDetail,
+              product_id: productDetail.id,
+              parent_product_id: productDetail.parent_id
             })
           }
         />

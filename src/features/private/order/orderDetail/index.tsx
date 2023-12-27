@@ -92,7 +92,8 @@ const OrderDetail = ({ id }: IOrderDetailProps) => {
         <ICClose />
       </div>
       <div className="flex flex-col gap-y-10">
-        <TitleManager title="Quản lý sản phẩm" />
+        <TitleManager title="Thông tin đơn hàng" />
+        <p className='text-_20 font-medium'>Đơn hàng:</p>
         <div className="grid grid-cols-2 gap-x-5 gap-y-5">
           {configs.map((config, index) => {
             return (
@@ -104,7 +105,7 @@ const OrderDetail = ({ id }: IOrderDetailProps) => {
           })}
         </div>
         <div className='flex flex-col gap-y-7'>
-          <p>Sản phẩm:</p>
+          <p className='text-_20 font-medium'>Sản phẩm:</p>
           <div className="flex flex-col gap-y-7">
             {orderDetail?.items?.map((product, index) => {
               return (
