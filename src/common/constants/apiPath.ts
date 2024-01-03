@@ -3,5 +3,6 @@ export const apiPath = {
     login: 'login',
     orders: 'orders',
     uploads: 'uploads',
-    user: 'user'
+    user: 'user',
+    inventory: 'inventory'
 }

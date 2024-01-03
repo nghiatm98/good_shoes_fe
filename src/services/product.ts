@@ -1,6 +1,6 @@
 import { apiPath } from 'common'
 import { api } from './api'
-import type { ProductCreateRequestModel, ProductModel, ProductParamsModel } from 'models'
+import type { ProductChangeQuantityModel, ProductCreateRequestModel, ProductModel, ProductParamsModel } from 'models'
 
 interface ProductPropsModel {
   params?: ProductParamsModel
@@ -30,5 +30,11 @@ export const ProductService = {
   },
   getProductChildren: async ({ params = {} }: ProductChildrentPropsModel): Promise<{ items: ProductModel[] }> => {
     return api.get(apiPath.products, { params })
+  },
+  addQuantity: async (data: ProductChangeQuantityModel): Promise<ProductModel> => {
+    return api.put(apiPath.inventory + '/add', data)
+  },
+  subQuantity: async (data: ProductChangeQuantityModel): Promise<ProductModel> => {
+    return api.put(apiPath.inventory + '/sub', data)
   },
 }

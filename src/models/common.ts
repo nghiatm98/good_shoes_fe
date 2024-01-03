@@ -26,6 +26,7 @@ export interface ProductParamsModel extends Record<string, unknown> {
   limit?: number
   color?: string
   size?: string
+  search?: string
 }
 
 export interface AuthModel {

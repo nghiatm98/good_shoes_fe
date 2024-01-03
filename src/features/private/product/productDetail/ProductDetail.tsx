@@ -10,6 +10,7 @@ import { toast } from 'react-toastify'
 import { ProductService } from 'services'
 import { UploadService } from 'services/upload'
 import * as Yup from 'yup'
+import { TableProductChild } from './components'
 
 const inputConfigs = [
   {
@@ -317,7 +318,7 @@ const ProductDetail = ({ productDetail = {} as ProductModel, productChildren = [
       {params.id && (
         <div className="flex flex-col gap-3">
           <p>Các sản phẩm con:</p>
-          <Table headerConfigs={HEADERS_PRODUCT} data={productChildren} />
+          <TableProductChild data={productChildren} parentId={params.id} />
         </div>
       )}
       <div className="flex flex-row gap-x-4 items-end">

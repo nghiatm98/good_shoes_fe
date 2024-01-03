@@ -1,4 +1,4 @@
-import { Table, TitleManager } from 'components'
+import { Input, Table, TitleManager } from 'components'
 import { OrderStatusModel, type HeaderTableModel, type OrderModel } from 'models'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-toastify'
@@ -6,6 +6,7 @@ import { OrderService } from 'services'
 import OrderDetail from './orderDetail'
 import { ModalContext } from 'contexts'
 import { formatNumberDot } from 'common'
+import { useNavigateWithQueryParams } from 'hooks'
 
 const HEADERS_ORDER = (handleConfirmOrder: (id: number | string, status: OrderStatusModel) => void, setElementModal: Function): HeaderTableModel[] => [
   {
@@ -87,6 +88,8 @@ const OrderManagement = () => {
   const { setElementModal } = useContext(ModalContext)
   const [orders, setOrders] = useState<OrderModel[]>([])
   const [loading, setLoading] = useState<boolean>(false)
+  const { handleChangeQuery, queryParam } = useNavigateWithQueryParams()
+  const [searchValue, setSearchValue] = useState(queryParam?.search ?? '')
   const onGetOrders = async () => {
     try {
       setLoading(true)
@@ -122,9 +125,25 @@ const OrderManagement = () => {
     return HEADERS_ORDER(handleConfirmOrder, setElementModal)
   }, [])
 
+  const handleSearch = async(e: any) => {
+    e?.stopPropagation()
+    if (e.key === 'Enter') {
+      handleChangeQuery([
+        {
+          field: 'search',
+          path: '/manager/orders',
+          value: searchValue
+        }
+      ])
+    }
+  }
+
   return (
     <div>
       <TitleManager title="Quản lý đơn hàng" />
+      <div className="mb-5">
+        <Input label="Tìm kiếm đơn hàng" value={searchValue} onKeyDown={handleSearch} onChange={(e) => setSearchValue((e.target as HTMLInputElement).value)} />
+      </div>
       <Table headerConfigs={headerConfigs} data={orders} loading={loading} />
     </div>
   )

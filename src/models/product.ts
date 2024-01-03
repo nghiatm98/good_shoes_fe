@@ -42,6 +42,12 @@ export interface ProductCreateRequestModel {
   total_quantity?: number
 }
 
+export interface ProductChangeQuantityModel {
+  product_id: string
+  parent_id: string
+  quantity: number
+}
+
 export enum ProductOptionTypeModel {
   SIZE = "SIZE",
   COLOR = "COLOR"

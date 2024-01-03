@@ -16,6 +16,8 @@ interface IInputProps {
   value?: string
   onChange?: (event: ChangeEvent) => void
   onRemoveAll?: () => void
+  classNameInput?: string
+  onKeyDown?: Function
 }
 
 export const Input = ({
@@ -32,7 +34,9 @@ export const Input = ({
   required,
   value,
   onChange = () => {},
-  onRemoveAll = () => {}
+  onRemoveAll = () => {},
+  classNameInput = '',
+  onKeyDown
 }: IInputProps) => {
   return (
     <div className={'flex flex-col gap-1 ' + className}>
@@ -47,7 +51,8 @@ export const Input = ({
           name={name}
           value={value}
           onChange={onChange}
-          className="h-14 border rounded-md px-5 py-3 w-full focus-visible:outline-_073/[.2] pr-[90px] placeholder:text-_969"
+          onKeyDown={(e) => onKeyDown && onKeyDown(e)}
+          className={"h-14 border rounded-md px-5 py-3 w-full focus-visible:outline-_073/[.2] pr-[90px] placeholder:text-_969 " + classNameInput}
           placeholder={placeholder}
         ></input>
         {icon && (

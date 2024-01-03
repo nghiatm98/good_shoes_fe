@@ -51,7 +51,7 @@ export function ProductProvider({ children }: IProductProviderProps) {
         params: {
           ...params,
           page: 1,
-          limit: 999999999,
+          limit: 999999999
         }
       })
       setProducts(items)
@@ -88,23 +88,26 @@ export function ProductProvider({ children }: IProductProviderProps) {
     })
   }, [categories])
 
-  const onGetOrders = async () => {
+  const onGetOrders = async (params: ProductParamsModel) => {
     try {
-      const { items } = await OrderService.getOrders({ page: 1,
-        limit: 999999999, })
+      const { items } = await OrderService.getOrders({ page: 1, limit: 999999999, ...params })
       setOrders(items)
     } catch (error) {}
   }
 
   useEffect(() => {
-    onGetOrders()
+    onGetOrders({})
     onGetAllProducts()
   }, [])
 
   useEffect(() => {
+    onGetOrders(queryParam)
+  }, [queryParam?.search])
+
+  useEffect(() => {
     onGetProducts(queryParam)
     onGetAllProducts(queryParam)
-  }, [queryParam?.category, queryParam?.brand, queryParam?.max_price, queryParam?.min_price, queryParam?.page])
+  }, [queryParam?.category, queryParam?.brand, queryParam?.max_price, queryParam?.min_price, queryParam?.page, queryParam?.search])
 
   return (
     <ProductContext.Provider

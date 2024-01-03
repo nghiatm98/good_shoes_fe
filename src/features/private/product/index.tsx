@@ -1,8 +1,9 @@
 import { pathsManager } from 'common'
-import { Button, Pagination, Table, TitleManager } from 'components'
+import { Button, Input, Pagination, Table, TitleManager } from 'components'
 import { ProductContext } from 'contexts'
+import { useNavigateWithQueryParams } from 'hooks'
 import type { HeaderTableModel } from 'models'
-import { useContext, useMemo } from 'react'
+import { useContext, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { ProductService } from 'services'
@@ -11,7 +12,7 @@ const HEADERS_PRODUCT = (handleSeeMore: (id: number | string) => void, handleDel
   {
     label: 'Tên sản phẩm',
     field: 'name'
-},
+  },
   {
     label: 'Danh mục',
     field: 'category'
@@ -54,6 +55,8 @@ const HEADERS_PRODUCT = (handleSeeMore: (id: number | string) => void, handleDel
 
 const ProductManagement = () => {
   const navigate = useNavigate()
+  const { handleChangeQuery, queryParam } = useNavigateWithQueryParams()
+  const [searchValue, setSearchValue] = useState(queryParam?.search ?? '')
   const { products, productsFilter } = useContext(ProductContext)
 
   const handleNavigateEdit = (id: string | number) => {
@@ -73,11 +76,27 @@ const ProductManagement = () => {
     return HEADERS_PRODUCT(handleNavigateEdit, handleDeleteProduct)
   }, [])
 
+  const handleSearch = async(e: any) => {
+    e?.stopPropagation()
+    if (e.key === 'Enter') {
+      handleChangeQuery([
+        {
+          field: 'search',
+          path: '/manager/products',
+          value: searchValue
+        }
+      ])
+    }
+  }
+
   return (
     <div>
       <TitleManager title="Quản lý sản phẩm">
-        <Button label='Thêm sản phẩm' className="!h-10 !text-_14" onClick={() => navigate('/manager/products/new')} />
+        <Button label="Thêm sản phẩm" className="!h-10 !text-_14" onClick={() => navigate('/manager/products/new')} />
       </TitleManager>
+      <div className="mb-5">
+        <Input label="Tìm kiếm sản phẩm" value={searchValue} onKeyDown={handleSearch} onChange={(e) => setSearchValue((e.target as HTMLInputElement).value)} />
+      </div>
       <Table headerConfigs={headerConfigs} data={productsFilter} />
       <Pagination totalItems={products?.length} pageSize={10} />
     </div>
