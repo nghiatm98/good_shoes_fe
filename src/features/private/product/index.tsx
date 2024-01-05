@@ -57,7 +57,7 @@ const ProductManagement = () => {
   const navigate = useNavigate()
   const { handleChangeQuery, queryParam } = useNavigateWithQueryParams()
   const [searchValue, setSearchValue] = useState(queryParam?.search ?? '')
-  const { products, productsFilter } = useContext(ProductContext)
+  const { products, productsFilter, onGetAllProducts, onGetProducts } = useContext(ProductContext)
 
   const handleNavigateEdit = (id: string | number) => {
     navigate(pathsManager.products.detail(id.toString()))
@@ -86,6 +86,8 @@ const ProductManagement = () => {
           value: searchValue
         }
       ])
+      onGetProducts(queryParam)
+      onGetAllProducts(queryParam)
     }
   }
 

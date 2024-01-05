@@ -10,6 +10,8 @@ interface ProductState {
   categoriesRouter: RouterModel[]
   brandsRouter: RouterModel[]
   orders: OrderModel[]
+  onGetProducts: (params: ProductParamsModel) => Promise<void>
+  onGetAllProducts: (params?: ProductParamsModel) => Promise<void>
 }
 
 export const ProductContext = createContext<ProductState>({
@@ -17,7 +19,9 @@ export const ProductContext = createContext<ProductState>({
   productsFilter: [],
   categoriesRouter: [],
   brandsRouter: [],
-  orders: []
+  orders: [],
+  onGetProducts: async () => {},
+  onGetAllProducts: async () => {}
 })
 
 interface IProductProviderProps {
@@ -107,7 +111,7 @@ export function ProductProvider({ children }: IProductProviderProps) {
   useEffect(() => {
     onGetProducts(queryParam)
     onGetAllProducts(queryParam)
-  }, [queryParam?.category, queryParam?.brand, queryParam?.max_price, queryParam?.min_price, queryParam?.page, queryParam?.search])
+  }, [queryParam?.category, queryParam?.brand, queryParam?.max_price, queryParam?.min_price, queryParam?.page])
 
   return (
     <ProductContext.Provider
@@ -116,7 +120,9 @@ export function ProductProvider({ children }: IProductProviderProps) {
         productsFilter,
         categoriesRouter,
         brandsRouter,
-        orders
+        orders,
+        onGetProducts,
+        onGetAllProducts
       }}
     >
       {children}
