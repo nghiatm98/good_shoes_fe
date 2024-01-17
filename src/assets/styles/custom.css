@@ -52,3 +52,7 @@
 .ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline {
   height: 300px;
 }
+
+.ck-dropdown, .ck-toolbar__separator, button[data-cke-tooltip-text='Block quote'], button[data-cke-tooltip-text='Link (Ctrl+K)'], button[data-cke-tooltip-text='Undo (Ctrl+Z)'], button[data-cke-tooltip-text='Redo (Ctrl+Y)'], .ck-file-dialog-button {
+  display: none !important;
+}

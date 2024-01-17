@@ -54,7 +54,7 @@ export const Table = ({ headerConfigs = [], data = [], loading = false }: ITable
                                 return (
                                   <Button
                                     key={idx}
-                                    className="!h-8 !text-_10"
+                                    className="!h-8 !text-_10 !px-4 !whitespace-nowrap"
                                     label={action.label}
                                     onClick={() => action && action.onClick && action.onClick(item?.id)}
                                   />

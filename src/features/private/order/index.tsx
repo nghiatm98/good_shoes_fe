@@ -41,16 +41,7 @@ const HEADERS_ORDER = (handleConfirmOrder: (id: number | string, status: OrderSt
     label: 'Email',
     field: 'customer_email'
   },
-  {
-    label: 'Xem chi tiết',
-    field: '1',
-    actions: [
-      {
-        label: 'Xem chi tiết',
-        onClick: (id: string | number) => setElementModal(<OrderDetail id={id} />)
-      }
-    ]
-  },
+  
   {
     label: 'Thay đổi trạng thái',
     field: '',
@@ -79,6 +70,16 @@ const HEADERS_ORDER = (handleConfirmOrder: (id: number | string, status: OrderSt
             onClick: (id: string | number) => handleConfirmOrder(id, OrderStatusModel.CANCELED)
           },
         ]
+      }
+    ]
+  },
+  {
+    label: 'Xem chi tiết',
+    field: '1',
+    actions: [
+      {
+        label: 'Xem chi tiết',
+        onClick: (id: string | number) => setElementModal(<OrderDetail id={id} />)
       }
     ]
   }

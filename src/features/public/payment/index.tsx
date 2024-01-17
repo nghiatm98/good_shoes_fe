@@ -41,7 +41,7 @@ const inputConfigs = [
     required: false
   },
   {
-    label: 'Ghi chủ',
+    label: 'Ghi chú',
     name: 'note',
     type: 'text',
     placeholder: 'Nhập ghi chú',

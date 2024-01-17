@@ -73,16 +73,16 @@ export const rootRouter: IRouter[] = [
     name: '',
     element: ProductDetailPage
   },
-  {
-    path: paths.new.prefix,
-    name: '',
-    element: NewPage
-  },
-  {
-    path: paths.new.detail(),
-    name: '',
-    element: NewDetailPage
-  },
+  // {
+  //   path: paths.new.prefix,
+  //   name: '',
+  //   element: NewPage
+  // },
+  // {
+  //   path: paths.new.detail(),
+  //   name: '',
+  //   element: NewDetailPage
+  // },
   {
     path: paths.aboutUs.prefix,
     name: '',

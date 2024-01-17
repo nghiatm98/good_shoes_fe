@@ -10,10 +10,10 @@ export const MAIN_MENUS: RouterModel[] = [
     label: 'Sản phẩm',
     path: '/products'
   },
-  {
-    label: 'Tin tức',
-    path: '/news'
-  },
+  // {
+  //   label: 'Tin tức',
+  //   path: '/news'
+  // },
   {
     label: 'Về chúng tôi',
     path: '/about-us'
@@ -30,10 +30,10 @@ export const HEADERS = (categories: RouterModel[]): RouterModel[] => [
     path: '/products',
     childrens: categories
   },
-  {
-    label: 'Tin tức',
-    path: '/news'
-  },
+  // {
+  //   label: 'Tin tức',
+  //   path: '/news'
+  // },
   {
     label: 'Về chúng tôi',
     path: '/about-us'
