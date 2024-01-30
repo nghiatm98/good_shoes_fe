@@ -53,6 +53,6 @@
   height: 300px;
 }
 
-.ck-dropdown, .ck-toolbar__separator, button[data-cke-tooltip-text='Block quote'], button[data-cke-tooltip-text='Link (Ctrl+K)'], button[data-cke-tooltip-text='Undo (Ctrl+Z)'], button[data-cke-tooltip-text='Redo (Ctrl+Y)'], .ck-file-dialog-button {
+.ck-dropdown, .ck-toolbar__separator, button[data-cke-tooltip-text='Increase indent'], button[data-cke-tooltip-text='Decrease indent'], button[data-cke-tooltip-text='Bulleted List'], button[data-cke-tooltip-text='Numbered List'], button[data-cke-tooltip-text='Block quote'], button[data-cke-tooltip-text='Link (Ctrl+K)'], button[data-cke-tooltip-text='Undo (Ctrl+Z)'], button[data-cke-tooltip-text='Redo (Ctrl+Y)'], .ck-file-dialog-button {
   display: none !important;
 }
