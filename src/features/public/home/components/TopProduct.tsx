@@ -19,7 +19,7 @@ export const TopProduct = ({ products = [] }: ITopProductProps) => {
           <span className="text-_18 leading-[120%]">Các dải sản phẩm chính</span>
         </div>
         <div>
-          {products.slice(0, 4).map((product, index) => {
+          {products?.slice(0, 4).map((product, index) => {
             return (
               <div
                 key={index}

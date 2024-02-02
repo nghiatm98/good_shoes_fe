@@ -8,7 +8,7 @@ interface IOutstandingProductProps {
 export const OutstandingProduct = ({ products = [] }: IOutstandingProductProps) => {
   return (
     <div className="my-9 grid grid-cols-4 gap-4 container">
-      {products.slice(0, 4).map((product, index) => {
+      {products?.slice(0, 4).map((product, index) => {
         return <OutstandingProductCard key={index} detail={product} />
       })}
     </div>
