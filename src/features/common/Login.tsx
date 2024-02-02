@@ -1,7 +1,7 @@
 import { ICClose, ICHiddenPasswordPng, ICShowPasswordPng } from 'assets'
 import { ERROR_MESSAGES, saveToken } from 'common'
 import { Button, Input } from 'components'
-import { ModalContext } from 'contexts'
+import { AuthContext, ModalContext } from 'contexts'
 import { useFormik } from 'formik'
 import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -11,6 +11,7 @@ import * as Yup from 'yup'
 const LoginPage = () => {
   const navigate = useNavigate()
   const { hideModal } = useContext(ModalContext)
+  const { onGetUserInfor } = useContext(AuthContext)
   const [isShowPassword, setIsShowPassword] = useState(false)
   const formik = useFormik({
     initialValues: {
@@ -26,6 +27,7 @@ const LoginPage = () => {
         const { token } = await AuthService.login(values)
         saveToken(token)
         hideModal()
+        onGetUserInfor()
         navigate('/manager/products')
       } catch (error) {
       } finally {

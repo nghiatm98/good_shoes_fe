@@ -7,10 +7,12 @@ import { AuthService } from 'services'
 
 interface AuthState {
   userInfo: UserInfoModel
+  onGetUserInfor: () => void
 }
 
 export const AuthContext = createContext<AuthState>({
-  userInfo: {} as UserInfoModel
+  userInfo: {} as UserInfoModel,
+  onGetUserInfor: () => {}
 })
 
 interface IAuthProviderProps {
@@ -30,7 +32,6 @@ export function AuthProvider({ children }: IAuthProviderProps) {
     } catch (error) {
       setUserInfo({} as UserInfoModel)
       if (pathname.includes('manager')) {
-        toast.error("Vui lòng đăng nhập")
         navigate('/')
       }
     } finally {
@@ -46,7 +47,8 @@ export function AuthProvider({ children }: IAuthProviderProps) {
   return (
     <AuthContext.Provider
       value={{
-        userInfo
+        userInfo,
+        onGetUserInfor
       }}
     >
       {children}

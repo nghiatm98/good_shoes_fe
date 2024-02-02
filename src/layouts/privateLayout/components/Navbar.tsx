@@ -3,10 +3,14 @@ import { ICLogout } from 'assets'
 import NavbarItem from './NavbarItem'
 import { useNavigate } from 'react-router-dom'
 import { Logo } from 'components'
+import { AuthContext } from 'contexts'
+import { useContext } from 'react'
 
 const Navbar = () => {
+  const { onGetUserInfor } = useContext(AuthContext)
   const navigate = useNavigate()
   const handleLogout = () => {
+    onGetUserInfor()
     removeToken()
     navigate('/')
   }
