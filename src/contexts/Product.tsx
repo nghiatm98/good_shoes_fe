@@ -101,6 +101,7 @@ export function ProductProvider({ children }: IProductProviderProps) {
 
   useEffect(() => {
     onGetOrders({})
+    onGetProducts({})
     onGetAllProducts()
   }, [])
 
