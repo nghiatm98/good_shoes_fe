@@ -3,7 +3,7 @@ import { Button, Input, Pagination, Table, TitleManager } from 'components'
 import { ProductContext } from 'contexts'
 import { useNavigateWithQueryParams } from 'hooks'
 import type { HeaderTableModel } from 'models'
-import { useContext, useMemo, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { ProductService } from 'services'
@@ -76,7 +76,7 @@ const ProductManagement = () => {
     return HEADERS_PRODUCT(handleNavigateEdit, handleDeleteProduct)
   }, [])
 
-  const handleSearch = async(e: any) => {
+  const handleSearch = async (e: any) => {
     e?.stopPropagation()
     if (e.key === 'Enter') {
       handleChangeQuery([
@@ -91,13 +91,23 @@ const ProductManagement = () => {
     }
   }
 
+  useEffect(() => {
+    onGetProducts(queryParam)
+    onGetAllProducts(queryParam)
+  }, [])
+
   return (
     <div>
       <TitleManager title="Quản lý sản phẩm">
         <Button label="Thêm sản phẩm" className="!h-10 !text-_14" onClick={() => navigate('/manager/products/new')} />
       </TitleManager>
       <div className="mb-5">
-        <Input label="Tìm kiếm sản phẩm" value={searchValue} onKeyDown={handleSearch} onChange={(e) => setSearchValue((e.target as HTMLInputElement).value)} />
+        <Input
+          label="Tìm kiếm sản phẩm"
+          value={searchValue}
+          onKeyDown={handleSearch}
+          onChange={(e) => setSearchValue((e.target as HTMLInputElement).value)}
+        />
       </div>
       <Table headerConfigs={headerConfigs} data={productsFilter} />
       <Pagination totalItems={products?.length} pageSize={10} />
