@@ -16,9 +16,13 @@ export const SubNav = ({ list = [], field = '', notActive = false, id = '' }: IS
       item.onClick(id)
       return
     }
+    if (item.value === queryParam?.[field]) {
+      handleRemoveQuery({ field, path: item.path, value: item.value || '' })
+      return
+    }
     handleChangeQuery([{ field, path: item.path, value: item.value || '' }])
   }
-  const { queryParam, handleChangeQuery } = useNavigateWithQueryParams()
+  const { queryParam, handleChangeQuery, handleRemoveQuery } = useNavigateWithQueryParams()
 
   return (
     <div

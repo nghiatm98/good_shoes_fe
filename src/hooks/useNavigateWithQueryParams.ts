@@ -27,8 +27,21 @@ export const useNavigateWithQueryParams = () => {
       search: qs.stringify(newQueryParam)
     })
   }
+
+  const handleRemoveQuery = (item: ChangeQueryModel) => {
+    const { field } = item
+    const newQueryParam: ProductParamsModel = { ...queryParam }
+    delete newQueryParam?.[field]
+
+    navigate({
+      pathname: window.location.pathname,
+      search: qs.stringify(newQueryParam)
+    })
+  }
+
   return {
     queryParam,
-    handleChangeQuery
+    handleChangeQuery,
+    handleRemoveQuery
   }
 }
