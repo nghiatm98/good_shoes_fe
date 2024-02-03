@@ -12,19 +12,15 @@ export const ProductDetailMain = () => {
   const queryParam: ProductParamsModel = qs.parse(location.search)
 
   const [productDetail, setProductDetail] = useState<ProductModel>({} as ProductModel)
-  const [loadng, setLoading] = useState<boolean>(false)
 
   const onGetProductDetail = async () => {
     try {
-      setLoading(true)
       const response = await ProductService.getProductDetail(params?.id ?? '', {
         color: queryParam.color,
         size: queryParam.size
       })
       setProductDetail(response)
     } catch (error) {
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -37,10 +33,6 @@ export const ProductDetailMain = () => {
     const image_url = productDetail.options?.find((option) => option.type === ProductOptionTypeModel.COLOR)?.items.find((i) => i.label === queryParam.color)?.image_url
     return image_url ? image_url.split(',') : []
   }, [productDetail])
-
-  if (loadng) {
-    return <LoadingComponent />
-  }
 
   return (
     <div className="container py-16 flex flex-row gap-x-20">

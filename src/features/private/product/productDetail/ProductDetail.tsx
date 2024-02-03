@@ -138,6 +138,7 @@ interface InitialValuesModel {
   description2: string
   image_url: string
   tag: string
+  sku: string
 }
 
 const optionInit = {
@@ -198,7 +199,8 @@ const ProductDetail = ({ productDetail = {} as ProductModel, productChildren = [
     description: productDetail?.description ?? '',
     description2: productDetail?.description2 ?? '',
     image_url: productDetail?.image_url ?? '',
-    tag: productDetail?.tag ?? ''
+    tag: productDetail?.tag ?? '',
+    sku: productDetail?.sku ?? '',
   }
 
   const formik = useFormik({
@@ -226,6 +228,7 @@ const ProductDetail = ({ productDetail = {} as ProductModel, productChildren = [
           })
           toast.success('Sửa sản phẩm thành công !')
           navigate('/manager/products')
+          return
         }
         await ProductService.createProduct({
           ...values,
@@ -247,7 +250,6 @@ const ProductDetail = ({ productDetail = {} as ProductModel, productChildren = [
         })
         toast.success('Tạo sản phẩm thành công !')
         navigate('/manager/products')
-        return 1
       } catch (error) {
         if (params.id) return toast.error('Sửa sản phẩm thất bại !')
         toast.error('Tạo sản phẩm thất bại !')

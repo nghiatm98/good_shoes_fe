@@ -35,7 +35,7 @@ export const TopProduct = ({ products = [] }: ITopProductProps) => {
                   </div>
                 </div>
                 <div className="flex-1">
-                  <ImageTranslation src={product?.image_url} />
+                  <ImageTranslation src={product?.image_url?.split(',')?.[0]} />
                 </div>
               </div>
             )

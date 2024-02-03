@@ -96,20 +96,27 @@ const ProductManagement = () => {
     onGetAllProducts(queryParam)
   }, [])
 
+  const dataTable = useMemo(() => {
+    return productsFilter.map((product) => ({
+      ...product,
+      status: Number(product.total_quantity) > 0 ? 'Còn hàng' : 'Hết hàng',
+    }))
+  }, [productsFilter])
+
   return (
     <div>
       <TitleManager title="Quản lý sản phẩm">
         <Button label="Thêm sản phẩm" className="!h-10 !text-_14" onClick={() => navigate('/manager/products/new')} />
       </TitleManager>
-      <div className="mb-5">
+      {/* <div className="mb-5">
         <Input
           label="Tìm kiếm sản phẩm"
           value={searchValue}
           onKeyDown={handleSearch}
           onChange={(e) => setSearchValue((e.target as HTMLInputElement).value)}
         />
-      </div>
-      <Table headerConfigs={headerConfigs} data={productsFilter} />
+      </div> */}
+      <Table headerConfigs={headerConfigs} data={dataTable} />
       <Pagination totalItems={products?.length} pageSize={10} />
     </div>
   )

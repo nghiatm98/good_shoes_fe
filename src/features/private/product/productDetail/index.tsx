@@ -31,7 +31,7 @@ const WrapperProductDetail = () => {
   const onGetProductChildren = async() => {
     try {
       if (!params?.id) return
-      const { items } = await ProductService.getProductChildren({
+      const { items = [] } = await ProductService.getProductChildren({
         params: {
           parent_id: params?.id ?? ''
         }

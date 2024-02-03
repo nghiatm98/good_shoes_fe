@@ -23,7 +23,6 @@ function App() {
         pauseOnHover
         theme="dark"
       />
-      <ErrorBoundary>
         <AuthProvider>
           <ModalProvider>
             <ProductProvider>
@@ -33,7 +32,6 @@ function App() {
             </ProductProvider>
           </ModalProvider>
         </AuthProvider>
-      </ErrorBoundary>
     </Suspense>
   )
 }

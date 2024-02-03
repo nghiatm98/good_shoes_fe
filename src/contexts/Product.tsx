@@ -110,9 +110,8 @@ export function ProductProvider({ children }: IProductProviderProps) {
   }, [queryParam?.search])
 
   useEffect(() => {
-    if (!queryParam?.category && !queryParam?.brand && !queryParam?.max_price && !queryParam?.min_price && !queryParam?.page) return
-    onGetProducts(queryParam)
-    onGetAllProducts(queryParam)
+    // onGetProducts(queryParam)
+    // onGetAllProducts(queryParam)
   }, [queryParam?.category, queryParam?.brand, queryParam?.max_price, queryParam?.min_price, queryParam?.page])
 
   return (

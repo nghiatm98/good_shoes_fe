@@ -47,8 +47,7 @@ export const TableProductChild = ({ data = [], parentId = '' }: ITableProductChi
   const [changeQuantityValue, setChangeQuantityValue] = useState<(number | string)[]>([])
 
   useEffect(() => {
-    console.log(data)
-    const initValues = data.map((_) => {
+    const initValues = data?.map((_) => {
       return ''
     })
     setChangeQuantityValue(initValues)
@@ -120,7 +119,7 @@ export const TableProductChild = ({ data = [], parentId = '' }: ITableProductChi
           </tr>
         </thead>
         <tbody>
-          {dataTable.map((item: any, index) => {
+          {dataTable?.map((item: any, index) => {
             return (
               <tr
                 key={index}

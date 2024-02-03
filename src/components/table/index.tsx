@@ -28,14 +28,14 @@ export const Table = ({ headerConfigs = [], data = [], loading = false }: ITable
           </tr>
         </thead>
         <tbody>
-          {!loading ? (
-            data.map((item, index) => {
+          {
+            data?.map((item, index) => {
               return (
                 <tr
                   key={index}
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 justify-center items-center"
                 >
-                  {headerConfigs.map((header, idx) => {
+                  {headerConfigs?.map((header, idx) => {
                     return (
                       <td key={idx} className={clsx('px-6 py-4 text-center', {})}>
                         <div
@@ -67,13 +67,7 @@ export const Table = ({ headerConfigs = [], data = [], loading = false }: ITable
                 </tr>
               )
             })
-          ) : (
-            <tr>
-              <td colSpan={headerConfigs.length}>
-                <LoadingComponent />
-              </td>
-            </tr>
-          )}
+          }
         </tbody>
       </table>
     </div>

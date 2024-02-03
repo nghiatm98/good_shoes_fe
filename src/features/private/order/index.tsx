@@ -38,11 +38,6 @@ const HEADERS_ORDER = (handleConfirmOrder: (id: number | string, status: OrderSt
     field: 'customer_email'
   },
   {
-    label: 'Email',
-    field: 'customer_email'
-  },
-  
-  {
     label: 'Thay đổi trạng thái',
     field: '',
     actions: [
@@ -142,9 +137,9 @@ const OrderManagement = () => {
   return (
     <div>
       <TitleManager title="Quản lý đơn hàng" />
-      <div className="mb-5">
+      {/* <div className="mb-5">
         <Input label="Tìm kiếm đơn hàng" value={searchValue} onKeyDown={handleSearch} onChange={(e) => setSearchValue((e.target as HTMLInputElement).value)} />
-      </div>
+      </div> */}
       <Table headerConfigs={headerConfigs} data={orders} loading={loading} />
     </div>
   )
